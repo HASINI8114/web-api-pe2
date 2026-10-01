@@ -1,46 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using gdb.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace GDB.Api.Infrastructure.Repositories
 {
     public class DataBaseConnectionManager
     {
-        private static readonly ILogger _logger = AppLogger.CreateLogger<DataBaseConnectionManager>();
+        private static readonly ILogger _logger =
+            AppLogger.CreateLogger<DataBaseConnectionManager>();
+
+        private static IConfiguration _configuration;
+
+        public static void Initialize(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         public static DbConnection GetConnection()
         {
-            var settings = System.Configuration.ConfigurationManager.ConnectionStrings["GDBConnection"];
+            DataBaseProviderRegistration.Register(_configuration);
 
-            if (settings == null)
+            string connectionString =
+                _configuration.GetConnectionString("GDBConnection");
+
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                _logger.LogError("Connection string 'GDBConnection' is missing from App.config");
-                throw new ConfigurationErrorsException("Connection string 'GDBConnection' not found.");
+                _logger.LogError(
+                    "Connection string 'GDBConnection' is missing.");
+
+                throw new ConfigurationErrorsException(
+                    "Connection string 'GDBConnection' not found.");
             }
 
-            string connectionString = settings.ConnectionString;
-            string providerName = settings.ProviderName;
+            string providerName = "Microsoft.Data.SqlClient";
 
             try
             {
-                DbProviderFactory factory = DbProviderFactories.GetFactory(providerName);
+                DbProviderFactory factory =
+                    DbProviderFactories.GetFactory(providerName);
 
-                DbConnection connection = factory.CreateConnection();
+                DbConnection connection =
+                    factory.CreateConnection();
 
-                connection.ConnectionString = connectionString;
+                connection.ConnectionString =
+                    connectionString;
 
                 return connection;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to create DB connection for provider {ProviderName}", providerName);
+                _logger.LogError(
+                    ex,
+                    "Failed to create DB connection for provider {ProviderName}",
+                    providerName);
+
                 throw;
             }
         }
