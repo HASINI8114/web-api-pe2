@@ -1,14 +1,14 @@
-﻿using GDB.App.Domain.Enums;
-using GDB.App.Domain.Models;
-using GDB.App.Infrastructure.Repositories.Contracts;
-using GDB.App.Infrastructure.Repositories.Queries;
+﻿using GDB.Api.Domain.Enums;
+using GDB.Api.Domain.Models;
+using GDB.Api.Infrastructure.Repositories.Contracts;
+using GDB.Api.Infrastructure.Repositories.Queries;
 using System.Data.Common;
 using gdb.Logging;
 using Microsoft.Extensions.Logging;
 using System.Data;
 //using System.Data.SqlClient;
 
-namespace GDB.App.Infrastructure.Repositories.Implementations
+namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
     internal class AccountRepositoryDB : IAccountRepository
     {

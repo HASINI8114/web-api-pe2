@@ -1,11 +1,11 @@
-﻿using GDB.App.Domain.Models;
+﻿using GDB.Api.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GDB.App.Infrastructure.Repositories.Contracts
+namespace GDB.Api.Infrastructure.Repositories.Contracts
 {
     public interface IAccountRepository
     {

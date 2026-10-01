@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using GDB.App.Data;
+using GDB.Api.Data;
 
-namespace GDB.App.Infrastructure.Repositories
+namespace GDB.Api.Infrastructure.Repositories
 {
     public static class GDBInMemoryDataStore
     {

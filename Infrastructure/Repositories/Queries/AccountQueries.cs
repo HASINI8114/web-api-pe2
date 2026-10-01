@@ -1,4 +1,4 @@
-﻿namespace GDB.App.Infrastructure.Repositories.Queries
+﻿namespace GDB.Api.Infrastructure.Repositories.Queries
 {
     internal static class AccountQueries
     {
