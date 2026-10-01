@@ -30,8 +30,8 @@ namespace GDB.Api.Application.Services.Implementations
     /// Implements account service operations for managing bank accounts.
     /// </summary>
     /// <remarks>
-    /// The <see cref="AccountService"/> class provides core business logic for account operations including:
-    /// <list type="bullet">
+    /// The <seecref="AccountService"/> class provides core business logic for account operations including:
+    /// <listtype="bullet">
     /// <item><description>Retrieving account information asynchronously</description></item>
     /// <item><description>Creating new accounts with various types (Savings, Current, Fixed Deposit, Salary)</description></item>
     /// <item><description>Viewing account details and balance inquiries</description></item>

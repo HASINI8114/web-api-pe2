@@ -1,10 +1,18 @@
+using GDB.Api.Application.Services.Contracts;
+using GDB.Api.Application.Services.Implementations;
+using GDB.Api.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
+
+// Register AccountService
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+DataBaseConnectionManager.Initialize(builder.Configuration);
 
 var app = builder.Build();
 
