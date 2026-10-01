@@ -1,8 +1,8 @@
-﻿using GDB.App.Data;
-using GDB.App.Domain;
-using GDB.App.Domain.Enums;
-using GDB.App.Domain.Models;
-using GDB.App.Infrastructure.Repositories.Contracts;
+﻿using GDB.Api.Data;
+using GDB.Api.Domain;
+using GDB.Api.Domain.Enums;
+using GDB.Api.Domain.Models;
+using GDB.Api.Infrastructure.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +11,9 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using GDB.App.Infrastructure.Repositories;
+using GDB.Api.Infrastructure.Repositories;
 
-namespace GDB.App.Infrastructure.Repositories.Implementations
+namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
     internal class AccountRepositoryInMemory : IAccountRepository
     {

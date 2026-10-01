@@ -1,7 +1,7 @@
 ﻿using System;
-using GDB.App.Domain.Exceptions;
+using GDB.Api.Domain.Exceptions;
 
-namespace GDB.App.Domain.Exceptions
+namespace GDB.Api.Domain.Exceptions
 {
     /// <summary>
     /// Purpose: Thrown when withdrawal amount exceeds available funds.

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using gdb.Logging;
 using Microsoft.Extensions.Logging;
-using GDB.App.Application.Dtos;
-using GDB.App.Domain.Enums;
-using GDB.App.Infrastructure.Repositories.Contracts;
-using GDB.App.Infrastructure.Repositories.Queries;
+using GDB.Api.Application.Dtos;
+using GDB.Api.Domain.Enums;
+using GDB.Api.Infrastructure.Repositories.Contracts;
+using GDB.Api.Infrastructure.Repositories.Queries;
 using System.Data.Common;
 
-namespace GDB.App.Infrastructure.Repositories.Implementations
+namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
     public class TransactionRepositoryDB : ITransactionRepository
     {

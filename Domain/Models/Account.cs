@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Security.Principal;
-using GDB.App.Domain;
-using GDB.App.Domain.Enums;
-using GDB.App.Domain.Exceptions;
+using GDB.Api.Domain;
+using GDB.Api.Domain.Enums;
+using GDB.Api.Domain.Exceptions;
 
-namespace GDB.App.Domain.Models
+namespace GDB.Api.Domain.Models
 {
     public abstract class Account : IAccount
     {

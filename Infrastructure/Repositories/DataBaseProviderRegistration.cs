@@ -5,7 +5,7 @@ using gdb.Logging;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 
-namespace GDB.App.Infrastructure.Repositories
+namespace GDB.Api.Infrastructure.Repositories
 {
     public class DataBaseProviderRegistration
     {

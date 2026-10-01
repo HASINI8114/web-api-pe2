@@ -1,12 +1,12 @@
-﻿using GDB.App.Application.Dtos;
+﻿using GDB.Api.Application.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GDB.App.Domain.Enums;
+using GDB.Api.Domain.Enums;
 
-namespace GDB.App.Infrastructure.Repositories.Contracts
+namespace GDB.Api.Infrastructure.Repositories.Contracts
 {
     public interface ITransactionRepository
     {

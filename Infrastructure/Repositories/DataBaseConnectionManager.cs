@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using gdb.Logging;
 using Microsoft.Extensions.Logging;
 
-namespace GDB.App.Infrastructure.Repositories
+namespace GDB.Api.Infrastructure.Repositories
 {
     public class DataBaseConnectionManager
     {

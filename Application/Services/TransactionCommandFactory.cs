@@ -1,16 +1,16 @@
-﻿using GDB.App.Application.Dtos;
-using GDB.App.Application.Services.Contracts;
-using GDB.App.Application.Services.Implementations;
-using GDB.App.Domain.Enums;
-using GDB.App.Infrastructure.Repositories;
-using GDB.App.Infrastructure.Repositories.Contracts;
+﻿using GDB.Api.Application.Dtos;
+using GDB.Api.Application.Services.Contracts;
+using GDB.Api.Application.Services.Implementations;
+using GDB.Api.Domain.Enums;
+using GDB.Api.Infrastructure.Repositories;
+using GDB.Api.Infrastructure.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GDB.App.Application.Services
+namespace GDB.Api.Application.Services
 {
     public static class TransactionCommandFactory
     {

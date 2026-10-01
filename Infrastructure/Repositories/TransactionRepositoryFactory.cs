@@ -1,9 +1,9 @@
-﻿using GDB.App.Infrastructure.Repositories.Contracts;
-using GDB.App.Infrastructure.Repositories.Implementations;
+﻿using GDB.Api.Infrastructure.Repositories.Contracts;
+using GDB.Api.Infrastructure.Repositories.Implementations;
 using gdb.Logging;
 using Microsoft.Extensions.Logging;
 
-namespace GDB.App.Infrastructure.Repositories
+namespace GDB.Api.Infrastructure.Repositories
 {
     public static class TransactionRepositoryFactory
     {

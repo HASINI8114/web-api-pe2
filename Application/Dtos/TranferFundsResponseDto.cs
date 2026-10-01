@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GDB.App.Domain.Enums;
+using GDB.Api.Domain.Enums;
 
-namespace GDB.App.Application.Dtos
+namespace GDB.Api.Application.Dtos
 {
     public class TranferFundsResponseDto
     {

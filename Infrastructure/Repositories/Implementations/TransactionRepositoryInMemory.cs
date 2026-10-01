@@ -1,14 +1,14 @@
-﻿using GDB.App.Application.Dtos;
-using GDB.App.Data;
-using GDB.App.Domain.Enums;
-using GDB.App.Infrastructure.Repositories.Contracts;
+﻿using GDB.Api.Application.Dtos;
+using GDB.Api.Data;
+using GDB.Api.Domain.Enums;
+using GDB.Api.Infrastructure.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using GDB.App.Infrastructure.Repositories;
+using GDB.Api.Infrastructure.Repositories;
 
-namespace GDB.App.Infrastructure.Repositories.Implementations
+namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
     public class TransactionRepositoryInMemory : ITransactionRepository
     {

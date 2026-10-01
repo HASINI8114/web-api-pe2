@@ -1,11 +1,11 @@
 ﻿// Domain/SavingsAccount.cs
-using GDB.App.Domain;
-using GDB.App.Domain.Exceptions;
+using GDB.Api.Domain;
+using GDB.Api.Domain.Exceptions;
 using System;
-using GDB.App.Domain.Enums;
+using GDB.Api.Domain.Enums;
 using System.Linq.Expressions;
 
-namespace GDB.App.Domain.Models
+namespace GDB.Api.Domain.Models
 {
     public class SavingsAccount : Account
     {

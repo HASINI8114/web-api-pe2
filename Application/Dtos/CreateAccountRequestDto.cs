@@ -1,11 +1,11 @@
-﻿using GDB.App.Domain.Enums;
+﻿using GDB.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GDB.App.Application.Dtos
+namespace GDB.Api.Application.Dtos
 {
     public class CreateAccountRequestDto
     {
