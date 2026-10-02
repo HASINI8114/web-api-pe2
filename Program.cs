@@ -5,9 +5,9 @@ using GDB.Api.Application.Services.Implementations;
 using GDB.Api.Common.Constants;
 using GDB.Api.Infrastructure.Repositories;
 
-DataBaseProviderRegistration.Register();
-
 var builder = WebApplication.CreateBuilder(args);
+
+DataBaseProviderRegistration.Register(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();
