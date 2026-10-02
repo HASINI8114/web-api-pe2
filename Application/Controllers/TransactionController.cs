@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using GDB.Api.Application.Dtos;
 using GDB.Api.Application.Services.Contracts;
+using GDB.Api.Common.Constants;
 using GDB.Api.Domain.Enums;
 
 
 namespace GDB.Api.Application.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion(ApiConstants.Version1)]
+    [Route(ApiConstants.BaseTransactions)]
     [ApiController]
     public class TransactionController : ControllerBase
     {
@@ -18,8 +20,8 @@ namespace GDB.Api.Application.Controllers
             _transactionService = transactionService;
         }
 
-        // POST: api/Transaction/deposit
-        [HttpPost("deposit")]
+        // POST: api/v1/transactions/deposit
+        [HttpPost(ApiConstants.Deposit)]
         public async Task<IActionResult> Deposit(
             [FromBody] TransactionDto transactionDto)
         {
@@ -45,8 +47,8 @@ namespace GDB.Api.Application.Controllers
             return Ok(result);
         }
 
-        // POST: api/Transaction/withdraw
-        [HttpPost("withdraw")]
+        // POST: api/v1/transactions/withdraw
+        [HttpPost(ApiConstants.Withdraw)]
         public async Task<IActionResult> Withdraw(
             [FromBody] TransactionDto transactionDto)
         {
@@ -75,8 +77,8 @@ namespace GDB.Api.Application.Controllers
             return Ok(result);
         }
 
-        // POST: api/Transaction/transfer
-        [HttpPost("transfer")]
+        // POST: api/v1/transactions/transfer
+        [HttpPost(ApiConstants.Transfer)]
         public async Task<IActionResult> Transfer(
             [FromBody] TransactionDto transactionDto)
         {
