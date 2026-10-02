@@ -1,13 +1,15 @@
-﻿using GDB.Api.Application.Services.Contracts;
-using Microsoft.AspNetCore.Http;
+using Asp.Versioning;
+using GDB.Api.Application.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using GDB.Api.Application.Dtos;
+using GDB.Api.Common.Constants;
 
 namespace GDB.Api.Application.Controllers
 {
+    [ApiVersion(ApiConstants.Version1)]
+    [Route(ApiConstants.BaseAccounts)]
     [ApiController]
-    [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -17,6 +19,7 @@ namespace GDB.Api.Application.Controllers
             _accountService = accountService;
         }
 
+        // GET: api/v1/accounts
         [HttpGet]
         public IActionResult GetAllAccounts()
         {
@@ -25,7 +28,8 @@ namespace GDB.Api.Application.Controllers
             return Ok(accounts);
         }
 
-        [HttpGet("{accNo}")]
+        // GET: api/v1/accounts/{accNo}
+        [HttpGet(ApiConstants.AccountByNumber)]
         public async Task<IActionResult> GetAccountAsync(string accNo)
         {
             var account = await _accountService.GetAccountAsync(accNo);
@@ -38,28 +42,40 @@ namespace GDB.Api.Application.Controllers
             return Ok(account);
         }
 
-        [HttpGet("{accNo}/balance")] 
-        public async Task<IActionResult> GetBalanceAsync(string accNo) 
-        { 
+        // GET: api/v1/accounts/{accNo}/balance
+        [HttpGet(ApiConstants.AccountBalance)]
+        public async Task<IActionResult> GetBalanceAsync(string accNo)
+        {
             var balance = await _accountService.GetBalanceAsync(accNo);
-            
-            return Ok(balance); 
+
+            return Ok(balance);
         }
-        [HttpGet("{accNo}/view")] 
-        public async Task<IActionResult> ViewAccountAsync(string accNo) 
-        { 
-            var account = await _accountService.ViewAccountAsync(accNo); 
-            return Ok(account); 
+
+        // GET: api/v1/accounts/{accNo}/view
+        [HttpGet(ApiConstants.AccountView)]
+        public async Task<IActionResult> ViewAccountAsync(string accNo)
+        {
+            var account = await _accountService.ViewAccountAsync(accNo);
+
+            return Ok(account);
         }
-        [HttpPost] public IActionResult CreateAccount(CreateAccountRequestDto request) 
-        { 
-            var account = _accountService.CreateAccount(request); 
-            return Ok(account); 
+
+        // POST: api/v1/accounts
+        [HttpPost]
+        public IActionResult CreateAccount(CreateAccountRequestDto request)
+        {
+            var account = _accountService.CreateAccount(request);
+
+            return Ok(account);
         }
-        [HttpPost("close")] public async Task<IActionResult> CloseAccountAsync(CloseAccountRequestDto request) 
-        { 
-            var account = await _accountService.CloseAccountAsync(request); 
-            return Ok(account); 
+
+        // POST: api/v1/accounts/close
+        [HttpPost(ApiConstants.CloseAccount)]
+        public async Task<IActionResult> CloseAccountAsync(CloseAccountRequestDto request)
+        {
+            var account = await _accountService.CloseAccountAsync(request);
+
+            return Ok(account);
         }
     }
 }
