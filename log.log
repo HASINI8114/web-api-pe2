@@ -134,3 +134,47 @@ System.ArgumentException: The specified invariant name 'Microsoft.Data.SqlClient
    at GDB.Api.Infrastructure.Repositories.DataBaseConnectionManager.GetConnection() in C:\Users\SoundaryaJAdmin\Source\Repos\web-api-pe2\Infrastructure\Repositories\DataBaseConnectionManager.cs:line 42
    at GDB.Api.Infrastructure.Repositories.Implementations.AccountRepositoryDB.GetAllAccounts() in C:\Users\SoundaryaJAdmin\Source\Repos\web-api-pe2\Infrastructure\Repositories\Implementations\AccountRepositoryDB.cs:line 445
 2026-10-01 19:00:51.410 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:21:47.515 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:23:35.058 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:23:56.297 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:35:20.713 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:36:39.029 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:37:23.687 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:39:07.711 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:39:07.733 +05:30 [WRN] Account 1000001333 not found in DB
+2026-10-02 01:39:07.745 +05:30 [WRN] Close requested for unknown account 1000001333
+2026-10-02 01:42:32.838 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:42:32.856 +05:30 [WRN] Account 9876543210 not found in DB
+2026-10-02 01:42:32.871 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 01:42:32.899 +05:30 [WRN] Rolling back SaveAccount for 9876543210
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'CreateAccount'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean isRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& executeTask, Boolean& usedCache, Boolean asyncWrite, Boolean isRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at GDB.Api.Infrastructure.Repositories.Implementations.AccountRepositoryDB.SaveAccount(IAccount account, String pin) in C:\Users\SoundaryaJAdmin\Source\Repos\web-api-pe2\Infrastructure\Repositories\Implementations\AccountRepositoryDB.cs:line 126
+ClientConnectionId:79da111b-ce44-4004-93fd-819e9e222579
+Error Number:2812,State:62,Class:16
+2026-10-02 01:42:32.952 +05:30 [ERR] Failed to save account 9876543210
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'CreateAccount'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean isRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& executeTask, Boolean& usedCache, Boolean asyncWrite, Boolean isRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at GDB.Api.Infrastructure.Repositories.Implementations.AccountRepositoryDB.SaveAccount(IAccount account, String pin) in C:\Users\SoundaryaJAdmin\Source\Repos\web-api-pe2\Infrastructure\Repositories\Implementations\AccountRepositoryDB.cs:line 126
+ClientConnectionId:79da111b-ce44-4004-93fd-819e9e222579
+Error Number:2812,State:62,Class:16
