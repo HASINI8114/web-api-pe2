@@ -4,3 +4,31 @@ GET {{GDBWebApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+POST {{GDBWebApi_HostAddress}}/api/Transaction/deposit
+Content-Type: application/json
+
+{
+  "accountNumber": "1000001001",
+  "amount": 1000
+}
+
+### Transfer
+POST {{GDBWebApi_HostAddress}}/api/Transaction/transfer
+Content-Type: application/json
+
+{
+  "fromAccount": "1000001001",
+  "toAccount": "1000001002",
+  "amount": 500,
+  "pin": "1111"
+}
+
+### Withdraw
+POST {{GDBWebApi_HostAddress}}/api/Transaction/withdraw
+Content-Type: application/json
+
+{
+  "accountNumber": "1000001001",
+  "amount": 500,
+  "pin": "1111"
+}
