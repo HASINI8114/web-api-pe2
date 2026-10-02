@@ -178,3 +178,50 @@ Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored proced
    at GDB.Api.Infrastructure.Repositories.Implementations.AccountRepositoryDB.SaveAccount(IAccount account, String pin) in C:\Users\SoundaryaJAdmin\Source\Repos\web-api-pe2\Infrastructure\Repositories\Implementations\AccountRepositoryDB.cs:line 126
 ClientConnectionId:79da111b-ce44-4004-93fd-819e9e222579
 Error Number:2812,State:62,Class:16
+2026-10-02 13:41:38.226 +05:30 [INF] Processing transaction "Deposit"
+2026-10-02 13:41:38.348 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:41:53.617 +05:30 [ERR] Failed to fetch account 1000001001
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlConnectionInternal connHandler, TimeoutTimer timeout, SqlConnectionOptions connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionOptions connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionOptions connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal..ctor(DbConnectionPoolIdentity identity, SqlConnectionOptions connectionOptions, TimeoutTimer timeout, SqlCredential credential, DbConnectionPoolGroupProviderInfo providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback, SspiContextProvider sspiContextProvider, ISqlClientMetrics metrics, RegisteredApplication registeredApplication)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(SqlConnectionOptions options, ConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreatePooledConnection(DbConnection owningConnection, IDbConnectionPool pool, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionInternal oldConnection, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, TimeoutTimer timeout, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, TimeoutTimer timeout, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at GDB.Api.Infrastructure.Repositories.Implementations.AccountRepositoryDB.GetAccountAsync(String accountNumber) in C:\Users\PunithGadmin\source\repos\web-api-pe2\Infrastructure\Repositories\Implementations\AccountRepositoryDB.cs:line 23
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:-1,State:0,Class:20
+2026-10-02 13:42:50.863 +05:30 [INF] Processing transaction "Deposit"
+2026-10-02 13:42:50.923 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:42:51.420 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:42:51.456 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:42:51.504 +05:30 [INF] Deposited ₹1,000.00 to 1000001001
+2026-10-02 13:42:51.510 +05:30 [INF] Transaction "Deposit" completed successfully
+2026-10-02 13:50:02.075 +05:30 [INF] Processing transaction "Transfer"
+2026-10-02 13:50:02.079 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:50:02.124 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:50:02.130 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:50:02.152 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:50:02.174 +05:30 [INF] Transferred ₹500.00 from 1000001001 to 1000001002
+2026-10-02 13:50:02.178 +05:30 [INF] Transaction "Transfer" completed successfully
+2026-10-02 13:51:58.462 +05:30 [INF] Processing transaction "Transfer"
+2026-10-02 13:51:58.514 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:51:58.965 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:51:58.993 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:51:59.039 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:51:59.048 +05:30 [INF] Transferred ₹500.00 from 1000001001 to 1000001002
+2026-10-02 13:51:59.054 +05:30 [INF] Transaction "Transfer" completed successfully
+2026-10-02 13:56:12.736 +05:30 [INF] Processing transaction "Withdraw"
+2026-10-02 13:56:12.778 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:56:13.200 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:56:13.217 +05:30 [INF] Registered DB provider Microsoft.Data.SqlClient
+2026-10-02 13:56:13.236 +05:30 [INF] Withdrew ₹500.00 from 1000001001
+2026-10-02 13:56:13.239 +05:30 [INF] Transaction "Withdraw" completed successfully
