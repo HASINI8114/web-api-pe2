@@ -3,3 +3,4 @@ obj/
 .vs/
 *.slnx
 *.log
+appsettings.Development.json
