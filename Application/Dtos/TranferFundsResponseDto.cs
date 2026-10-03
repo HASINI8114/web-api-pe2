@@ -19,7 +19,7 @@ namespace GDB.Api.Application.Dtos
 
         public decimal ToAccountBalance { get; set; }
 
-        public TransactionStatus TransactionStat { get; set; }
+        public TransactionStatus TransactionStatus { get; set; }
 
     }
 }

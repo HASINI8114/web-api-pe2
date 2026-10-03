@@ -12,16 +12,26 @@ using System.Threading.Tasks;
 
 namespace GDB.Api.Application.Services
 {
-    public static class TransactionCommandFactory
+    public class TransactionCommandFactory : ITransactionCommandFactory
     {
-        public static ITransactionCommand<TResponse> Create<TResponse>(
+
+        private readonly IAccountRepositoryFactory _accountRepositoryFactory;
+
+        private readonly ITransactionRepositoryFactory _transactionRepositoryFactory;
+
+        public TransactionCommandFactory(IAccountRepositoryFactory accountRepositoryFactory, ITransactionRepositoryFactory transactionRepositoryFactory)
+        {
+            _accountRepositoryFactory = accountRepositoryFactory;
+            _transactionRepositoryFactory = transactionRepositoryFactory;
+        }
+        public  ITransactionCommand<TResponse> Create<TResponse>(
             TransactionType transactionType)
         {
             IAccountRepository accountRepository =
-                AccountRepositoryFactory.Create("DB");
+                _accountRepositoryFactory.Create("DB");
 
             ITransactionRepository transactionRepository =
-                TransactionRepositoryFactory.Create("DB");
+                _transactionRepositoryFactory.Create("DB");
 
             return transactionType switch
             {

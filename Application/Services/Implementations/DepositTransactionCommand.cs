@@ -53,12 +53,12 @@ namespace GDB.Api.Application.Services.Implementations
             account.Deposit(transactionDto.Amount);
 
             // Update account balance
-            _accountRepository.UpdateBalance(
+            await _accountRepository.UpdateBalanceAsync(
                 transactionDto.AccountNumber,
                 account.Balance);
 
             // Save transaction record
-            _transactionRepository.SaveTransaction(
+            await _transactionRepository.SaveTransactionAsync(
                 null,
                 transactionDto.AccountNumber,
                 TransactionType.Deposit,

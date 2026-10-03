@@ -5,20 +5,29 @@ using Microsoft.Extensions.Logging;
 
 namespace GDB.Api.Infrastructure.Repositories
 {
-    public static class TransactionRepositoryFactory
+    public class TransactionRepositoryFactory : ITransactionRepositoryFactory
     {
+
+        private readonly IDataBaseConnectionManager _connectionManager;
+        private readonly IGDBInMemoryDataStore _gDBInMemoryDataStore;
+
+        public TransactionRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore)
+        {
+            _connectionManager = connectionManager;
+            _gDBInMemoryDataStore = gDBInMemoryDataStore;
+        }
         private static readonly ILogger _logger = AppLogger.CreateLogger("GDB.App.Infrastructure.Repositories.TransactionRepositoryFactory");
 
-        public static ITransactionRepository Create(string type)
+        public ITransactionRepository Create(string type)
         {
             if (type == "DB")
             {
-                return new TransactionRepositoryDB();
+                return new TransactionRepositoryDB(_connectionManager);
             }
 
             else if (type == "InMemory")
             {
-                return new TransactionRepositoryInMemory();
+                return new TransactionRepositoryInMemory(_gDBInMemoryDataStore);
             }
 
             _logger.LogError("Invalid transaction repository type {Type}", type);

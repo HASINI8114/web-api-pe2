@@ -7,10 +7,10 @@ namespace GDB.Api.Data
     /// Factory for creating the in-memory GDB DataSet.
     /// The schema matches the current Domain Account classes.
     /// </summary>
-    public static class GDBInMemoryDB
+    public class GDBInMemoryDB: IGDBInMemoryDB
     {
 
-        public static DataSet CreateDataSet()
+        public DataSet CreateDataSet()
         {
             var ds = new DataSet("GDBDataSet");
 
@@ -34,7 +34,7 @@ namespace GDB.Api.Data
         // TRANSACTION
         // =========================================================
 
-        private static void CreateTransactionTable(DataSet ds)
+        private void CreateTransactionTable(DataSet ds)
         {
             var dt = new DataTable("TRANSACTION");
 
@@ -111,7 +111,7 @@ namespace GDB.Api.Data
         // ACCOUNT
         // =========================================================
 
-        private static void CreateAccountTable(DataSet ds)
+        private void CreateAccountTable(DataSet ds)
         {
             var dt = new DataTable("ACCOUNT");
 
@@ -191,7 +191,7 @@ namespace GDB.Api.Data
         // SAVINGS ACCOUNT
         // =========================================================
 
-        private static void CreateSavingsTable(DataSet ds)
+        private void CreateSavingsTable(DataSet ds)
         {
             var dt = new DataTable("SAVINGS_ACCOUNT");
 
@@ -230,7 +230,7 @@ namespace GDB.Api.Data
         // CURRENT ACCOUNT
         // =========================================================
 
-        private static void CreateCurrentTable(DataSet ds)
+        private void CreateCurrentTable(DataSet ds)
         {
             var dt = new DataTable("CURRENT_ACCOUNT");
 
@@ -261,7 +261,7 @@ namespace GDB.Api.Data
         // FIXED DEPOSIT ACCOUNT
         // =========================================================
 
-        private static void CreateFixedDepositTable(DataSet ds)
+        private void CreateFixedDepositTable(DataSet ds)
         {
             var dt = new DataTable("FIXED_DEPOSIT_ACCOUNT");
 
@@ -300,7 +300,7 @@ namespace GDB.Api.Data
         // SALARY ACCOUNT
         // =========================================================
 
-        private static void CreateSalaryTable(DataSet ds)
+        private void CreateSalaryTable(DataSet ds)
         {
             var dt = new DataTable("SALARY_ACCOUNT");
 
@@ -339,7 +339,7 @@ namespace GDB.Api.Data
         // RELATIONSHIPS
         // =========================================================
 
-        private static void CreateRelations(DataSet ds)
+        private void CreateRelations(DataSet ds)
         {
             AddRelation(
                 ds,
@@ -375,7 +375,7 @@ namespace GDB.Api.Data
         }
 
 
-        private static void AddRelation(
+        private void AddRelation(
             DataSet ds,
             string relationName,
             string parentTable,
@@ -407,7 +407,7 @@ namespace GDB.Api.Data
         // SAMPLE DATA
         // =========================================================
 
-        private static void PopulateSampleData(DataSet ds)
+        private void PopulateSampleData(DataSet ds)
         {
             var accounts = ds.Tables["ACCOUNT"];
             var savings = ds.Tables["SAVINGS_ACCOUNT"];
@@ -643,7 +643,7 @@ namespace GDB.Api.Data
         // HELPER
         // =========================================================
 
-        private static void AddAccount(
+        private void AddAccount(
             DataTable accounts,
             string accountNumber,
             string name,

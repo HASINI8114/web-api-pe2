@@ -2,16 +2,17 @@
 using GDB.Api.Domain;
 using GDB.Api.Domain.Enums;
 using GDB.Api.Domain.Models;
+using GDB.Api.Infrastructure.Repositories;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using GDB.Api.Infrastructure.Repositories;
 
 namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
@@ -21,12 +22,12 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 
         private static DataSet _dataSet;
 
-        public AccountRepositoryInMemory()
+        public AccountRepositoryInMemory(IGDBInMemoryDataStore gDBInMemoryDataStore)
         {
 
             if (_dataSet == null)
             {
-                _dataSet = GDBInMemoryDataStore.DataSet;
+                _dataSet = gDBInMemoryDataStore.DataSet;
             }
 
         }
@@ -98,7 +99,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 
             return (IAccount)Task.FromResult(account);
         }
-        public void SaveAccounts(IAccount fromAccount, IAccount toAccount)
+        public async Task SaveAccountsAsync(IAccount fromAccount, IAccount toAccount)
         {
             DataTable accountTable = _dataSet.Tables["ACCOUNT"];
 
@@ -116,7 +117,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             fromRow["Balance"] = fromAccount.Balance;
             toRow["Balance"] = toAccount.Balance;
         }
-        public List<IAccount> GetAllAccounts()
+        public async Task<List<IAccount>> GetAllAccountsAsync   ()
         {
             List<IAccount> accounts = new List<IAccount>();
 
@@ -178,7 +179,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 
             return accounts;
         }
-        public void CloseAccount(string accountNumber)
+        public async Task CloseAccountAsync(string accountNumber)
         {
             DataTable accountTable = _dataSet.Tables["ACCOUNT"];
 
@@ -194,7 +195,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 
             row["Status"] = "Closed";
         }
-        public void SaveAccount(IAccount account, string pin)
+        public async Task SaveAccountAsync(IAccount account, string pin)
         {
             DataTable accountTable = _dataSet.Tables["ACCOUNT"];
 
@@ -221,7 +222,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             accountTable.Rows.Add(row);
         }
 
-        public void UpdateBalance(string accountNumber, decimal balance)
+        public async Task UpdateBalanceAsync(string accountNumber, decimal balance)
         {
             DataTable accountTable = _dataSet.Tables["ACCOUNT"];
 

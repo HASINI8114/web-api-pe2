@@ -21,9 +21,9 @@ namespace GDB.Api.Application.Controllers
 
         // GET: api/v1/accounts
         [HttpGet]
-        public IActionResult GetAllAccounts()
+        public async Task<IActionResult> GetAllAccountsAsync()
         {
-            var accounts = _accountService.GetAllAccounts();
+            var accounts = await _accountService.GetAllAccountsAsync();
 
             return Ok(accounts);
         }
@@ -62,9 +62,9 @@ namespace GDB.Api.Application.Controllers
 
         // POST: api/v1/accounts
         [HttpPost]
-        public IActionResult CreateAccount(CreateAccountRequestDto request)
+        public async Task<IActionResult> CreateAccountAsync(CreateAccountRequestDto request)
         {
-            var account = _accountService.CreateAccount(request);
+            var account = await _accountService.CreateAccountAsync(request);
 
             return Ok(account);
         }

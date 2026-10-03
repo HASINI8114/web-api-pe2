@@ -58,12 +58,12 @@ namespace GDB.Api.Application.Services.Implementations
                 transactionDto.Pin);
 
             // Update balance
-            _accountRepository.UpdateBalance(
+            await _accountRepository.UpdateBalanceAsync(
                 transactionDto.AccountNumber,
                 account.Balance);
 
             // Save transaction
-            _transactionRepository.SaveTransaction(
+            await _transactionRepository.SaveTransactionAsync(
                 transactionDto.AccountNumber,
                 null,
                 TransactionType.Withdraw,

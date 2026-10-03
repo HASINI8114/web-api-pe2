@@ -22,8 +22,8 @@ namespace GDB.Api.Application.Services.Contracts
 
         Task<ViewAccountResponseDto> ViewAccountAsync(string accNo);
 
-        List<ViewAllAccountsResponseDto> GetAllAccounts();
-        CreateAccountResponseDto CreateAccount(CreateAccountRequestDto request);
+        Task<List<ViewAllAccountsResponseDto>> GetAllAccountsAsync();
+        Task<CreateAccountResponseDto> CreateAccountAsync(CreateAccountRequestDto request);
 
         Task<CloseAccountResponseDto> CloseAccountAsync( CloseAccountRequestDto request);
     }

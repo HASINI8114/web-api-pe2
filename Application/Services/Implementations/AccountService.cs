@@ -46,6 +46,8 @@ namespace GDB.Api.Application.Services.Implementations
         /// <summary>
         /// Provides data access operations for account entities.
         /// </summary>
+        /// 
+        private readonly string choice = "DB"; // This can be configured externally or via dependency injection
         private readonly IAccountRepository _accountRepository;
 
         /// <summary>
@@ -61,12 +63,14 @@ namespace GDB.Api.Application.Services.Implementations
         /// The repository is configured to use the database ("DB") as the data source,
         /// allowing for abstraction of the underlying data storage mechanism.
         /// </remarks>
-        public AccountService()
+        public AccountService(IAccountRepositoryFactory _accountRepositoryfactory)
         {
             // Repository is created via factory pattern for loose coupling
-            _accountRepository = AccountRepositoryFactory.Create("DB");
+            _accountRepository = _accountRepositoryfactory.Create(choice);
         }
 
+
+        
         /// <summary>
         /// Retrieves an account asynchronously by its account number.
         /// </summary>
@@ -111,17 +115,17 @@ namespace GDB.Api.Application.Services.Implementations
         /// </remarks>
         /// <example>
         /// <code>
-        /// var allAccounts = accountService.GetAllAccounts();
+        /// var allAccounts = await accountService.GetAllAccountsAsync();
         /// foreach (var account in allAccounts)
         /// {
         ///     Console.WriteLine($"{account.Name} - {account.AccountNumber}: {account.Balance}");
         /// }
         /// </code>
         /// </example>
-        public List<ViewAllAccountsResponseDto> GetAllAccounts()
+        public async Task<List<ViewAllAccountsResponseDto>> GetAllAccountsAsync()
         {
             // Retrieve all accounts from the repository
-            List<IAccount> accounts = _accountRepository.GetAllAccounts();
+            List<IAccount> accounts = await _accountRepository.GetAllAccountsAsync();
 
             // Initialize collection for DTOs
             List<ViewAllAccountsResponseDto> dto = new List<ViewAllAccountsResponseDto>();
@@ -260,7 +264,7 @@ namespace GDB.Api.Application.Services.Implementations
             }
 
             // Close account in repository
-            _accountRepository.CloseAccount(request.AccountNumber);
+            await _accountRepository.CloseAccountAsync(request.AccountNumber);
 
             // Log successful closure
             _logger.LogInformation("Account {AccountNumber} closed", request.AccountNumber);
@@ -323,10 +327,10 @@ namespace GDB.Api.Application.Services.Implementations
         /// Console.WriteLine($"Account created: {response.AccountNumber}");
         /// </code>
         /// </example>
-        public CreateAccountResponseDto CreateAccount(CreateAccountRequestDto request)
+        public async Task<CreateAccountResponseDto> CreateAccountAsync(CreateAccountRequestDto request)
         {
             // Check if the Account already Exists
-            var existing = _accountRepository.GetAccountAsync(request.AccountNumber).GetAwaiter().GetResult();
+            var existing = await _accountRepository.GetAccountAsync(request.AccountNumber);
             if (existing != null)
             {
                 throw new InvalidOperationException($"Account {request.AccountNumber} already exists.");
@@ -350,7 +354,7 @@ namespace GDB.Api.Application.Services.Implementations
             );
 
             // Persist account to repository
-            _accountRepository.SaveAccount(account, request.Pin);
+            await _accountRepository.SaveAccountAsync(account, request.Pin);
 
             // Log account creation
             _logger.LogInformation("Created {AccountType} account {AccountNumber}", account.AccountType, account.AccountNumber);
