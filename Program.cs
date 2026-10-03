@@ -3,7 +3,10 @@ using GDB.Api.Application.Services;
 using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Application.Services.Implementations;
 using GDB.Api.Common.Constants;
+using GDB.Api.Data;
 using GDB.Api.Infrastructure.Repositories;
+using GDB.Api.Infrastructure.Repositories.Contracts;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,6 @@ DataBaseProviderRegistration.Register(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddScoped<IAccountService>(_ => AccountServiceFactory.Create());
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -35,13 +37,29 @@ builder.Services.AddOpenApi("v2");
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IGDBInMemoryDB, GDBInMemoryDB>();
+
+builder.Services.AddSingleton<IGDBInMemoryDataStore, GDBInMemoryDataStore>();
+
 // Register AccountService
 builder.Services.AddScoped<IAccountService, AccountService>();
+
+// Register AccountRepositoryFactory
+builder.Services.AddScoped<IAccountRepositoryFactory, AccountRepositoryFactory>();
 
 // Register TransactionService
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
-DataBaseConnectionManager.Initialize(builder.Configuration);
+// Register TransactionRepositoryFactory
+builder.Services.AddScoped<ITransactionRepositoryFactory, TransactionRepositoryFactory>();
+
+// Register TransactionCommandFactory
+builder.Services.AddScoped<ITransactionCommandFactory, TransactionCommandFactory>();
+
+// Register DataBaseConnectionManager
+builder.Services.AddScoped<IDataBaseConnectionManager, DataBaseConnectionManager>();
+
+//DataBaseConnectionManager.Initialize(builder.Configuration);
 
 var app = builder.Build();
 

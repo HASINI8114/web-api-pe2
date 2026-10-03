@@ -10,10 +10,10 @@ namespace GDB.Api.Infrastructure.Repositories.Contracts
 {
     public interface ITransactionRepository
     {
-        List<ViewRecentTransactionsResponseDto> GetRecentTransactions(
-        string accountNumber);
+        Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(
+            string accountNumber);
 
-        void SaveTransaction(
+        Task SaveTransactionAsync(
            string fromAccountNumber,
            string toAccountNumber,
            TransactionType transactionType,

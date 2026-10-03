@@ -10,12 +10,12 @@ namespace GDB.Api.Infrastructure.Repositories.Contracts
     public interface IAccountRepository
     {
         Task<IAccount> GetAccountAsync(string accountNumber);
-        void CloseAccount(string accountNumber);
-        void SaveAccount(IAccount account, string pin);
-        List<IAccount> GetAllAccounts();
-        void SaveAccounts(IAccount fromAccount, IAccount toAccount);
-        //void ChangePin(string accountNumber, string oldPin, string newPin);
-        void UpdateBalance(string accountNumber, decimal balance);
+        Task CloseAccountAsync(string accountNumber);
+        Task SaveAccountAsync(IAccount account, string pin);
+        Task<List<IAccount>> GetAllAccountsAsync();
+        Task SaveAccountsAsync(IAccount fromAccount, IAccount toAccount);
+        //Task ChangePinAsync(string accountNumber, string oldPin, string newPin);
+        Task UpdateBalanceAsync(string accountNumber, decimal balance);
 
     }
 }

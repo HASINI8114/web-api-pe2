@@ -9,7 +9,6 @@ namespace GDB.Api.Application.Dtos
     public class TransactionDto
     {
         public string? AccountNumber { get; set; }
-
         public string? FromAccount { get; set; }
 
         public string? ToAccount { get; set; }

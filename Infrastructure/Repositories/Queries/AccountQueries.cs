@@ -234,8 +234,7 @@
                     SELECT AccountStatusId
                     FROM AccountStatuses
                     WHERE Code = 'CLOSED'
-                ),
-                ClosedAt = SYSUTCDATETIME()
+                )
             WHERE AccountNumber = @AccountNumber";
 
 

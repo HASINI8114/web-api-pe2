@@ -12,13 +12,19 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
     internal class AccountRepositoryDB : IAccountRepository
     {
+        private readonly IDataBaseConnectionManager _connectionManager;
+
+        public AccountRepositoryDB(IDataBaseConnectionManager connectionManager)
+        {
+            _connectionManager = connectionManager;
+        }
         private static readonly ILogger _logger = AppLogger.CreateLogger<AccountRepositoryDB>();
 
         public async Task<IAccount> GetAccountAsync(string accountNumber)
         {
             try
             {
-                using (DbConnection connection = DataBaseConnectionManager.GetConnection())
+                using (DbConnection connection = _connectionManager.GetConnection())
                 {
                     await connection.OpenAsync().ConfigureAwait(false);
 
@@ -53,19 +59,19 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         }
 
 
-        public void SaveAccount(
+        public async Task SaveAccountAsync(
             IAccount account,
             string pin)
         {
             try
             {
                 using (DbConnection connection =
-                       DataBaseConnectionManager.GetConnection())
+                       _connectionManager.GetConnection())
                 {
-                    connection.Open();
+                    await connection.OpenAsync().ConfigureAwait(false);
 
                     DbTransaction transaction =
-                        connection.BeginTransaction();
+                        await connection.BeginTransactionAsync().ConfigureAwait(false);
 
                     try
                     {
@@ -75,7 +81,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                                connection.CreateCommand())
                         {
                             command.Transaction = transaction;
-                            command.CommandText =AccountQueries.CreateAccount;
+                            command.CommandText = AccountQueries.CreateAccount;
 
                             command.CommandType =
                                 CommandType.StoredProcedure;
@@ -125,10 +131,10 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 
                             accountId =
                                 Convert.ToInt64(
-                                    command.ExecuteScalar());
+                                    await command.ExecuteScalarAsync().ConfigureAwait(false));
                         }
 
-                        SaveAccountType(
+                        await SaveAccountTypeAsync(
                             account,
                             accountId,
                             connection,
@@ -137,8 +143,8 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                         transaction.Commit();
                     }
                     catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Rolling back SaveAccount for {AccountNumber}", account.AccountNumber);
+                    {   
+                        _logger.LogWarning(ex, "Rolling back SaveAccountAsync for {AccountNumber}", account.AccountNumber);
                         transaction.Rollback();
                         throw;
                     }
@@ -152,7 +158,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         }
 
 
-        private void SaveAccountType(
+        private async Task SaveAccountTypeAsync(
             IAccount account,
             long accountId,
             DbConnection connection,
@@ -160,7 +166,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         {
             if (account is SavingsAccount savings)
             {
-                SaveSavingsAccount(
+                await SaveSavingsAccountAsync(
                     savings,
                     accountId,
                     connection,
@@ -168,7 +174,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             }
             else if (account is CurrentAccount current)
             {
-                SaveCurrentAccount(
+                await SaveCurrentAccountAsync(
                     current,
                     accountId,
                     connection,
@@ -176,7 +182,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             }
             else if (account is FixedDepositAccount fixedDeposit)
             {
-                SaveFixedDepositAccount(
+                await SaveFixedDepositAccountAsync(
                     fixedDeposit,
                     accountId,
                     connection,
@@ -184,7 +190,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             }
             else if (account is SalaryAccount salary)
             {
-                SaveSalaryAccount(
+                await SaveSalaryAccountAsync(
                     salary,
                     accountId,
                     connection,
@@ -197,7 +203,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         }
 
 
-        private void SaveSavingsAccount(
+        private async Task SaveSavingsAccountAsync(
             SavingsAccount savings,
             long accountId,
             DbConnection connection,
@@ -228,12 +234,12 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     "@MinimumBalance",
                     savings.MinBalance);
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
         }
 
 
-        private void SaveCurrentAccount(
+        private async Task SaveCurrentAccountAsync(
             CurrentAccount current,
             long accountId,
             DbConnection connection,
@@ -259,12 +265,12 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     "@OverdraftLimit",
                     current.OverdraftLimit);
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
         }
 
 
-        private void SaveFixedDepositAccount(
+        private async Task SaveFixedDepositAccountAsync (
             FixedDepositAccount fixedDeposit,
             long accountId,
             DbConnection connection,
@@ -307,12 +313,12 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     "@MaturityAmount",
                     maturityAmount);
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
         }
 
         
-        private void SaveSalaryAccount(
+        private async Task SaveSalaryAccountAsync(
             SalaryAccount salary,
             long accountId,
             DbConnection connection,
@@ -347,21 +353,21 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     "@SalaryAmount",
                     salary.Balance);
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
         }
 
 
-        public void UpdateBalance(
+        public async Task UpdateBalanceAsync(
             string accountNumber,
             decimal balance)
         {
             try
             {
                 using DbConnection connection =
-                    DataBaseConnectionManager.GetConnection();
+                    _connectionManager.GetConnection();
 
-                connection.Open();
+                await connection.OpenAsync().ConfigureAwait(false);
 
                 using DbCommand command =
                     connection.CreateCommand();
@@ -379,7 +385,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     "@AccountNumber",
                     accountNumber);
 
-                int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                 if (rowsAffected == 0)
                 {
@@ -394,15 +400,15 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         }
 
 
-        public void CloseAccount(
+        public async Task CloseAccountAsync(
             string accountNumber)
         {
             try
             {
                 using (DbConnection connection =
-                       DataBaseConnectionManager.GetConnection())
+                       _connectionManager.GetConnection())
                 {
-                    connection.Open();
+                    await connection.OpenAsync().ConfigureAwait(false);
 
                     using (DbCommand command =
                            connection.CreateCommand())
@@ -416,7 +422,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                             accountNumber);
 
                         int rowsAffected =
-                            command.ExecuteNonQuery();
+                            await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                         if (rowsAffected == 0)
                         {
@@ -435,7 +441,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         }
 
 
-        public List<IAccount> GetAllAccounts()
+        public async Task<List<IAccount>> GetAllAccountsAsync()
         {
             try
             {
@@ -443,9 +449,9 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     new List<IAccount>();
 
                 using (DbConnection connection =
-                       DataBaseConnectionManager.GetConnection())
+                       _connectionManager.GetConnection())
                 {
-                    connection.Open();
+                    await connection.OpenAsync().ConfigureAwait(false);
 
                     using (DbCommand command =
                            connection.CreateCommand())
@@ -454,9 +460,9 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                             AccountQueries.GetAllAccounts;
 
                         using (DbDataReader reader =
-                               command.ExecuteReader())
+                               await command.ExecuteReaderAsync().ConfigureAwait(false))
                         {
-                            while (reader.Read())
+                            while (await reader.ReadAsync().ConfigureAwait(false))
                             {
                                 accounts.Add(
                                     CreateAccount(reader));
@@ -475,16 +481,16 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         }
 
 
-        public void SaveAccounts(
+        public async Task SaveAccountsAsync(
             IAccount fromAccount,
             IAccount toAccount)
         {
             try
             {
                 using (DbConnection connection =
-                       DataBaseConnectionManager.GetConnection())
+                       _connectionManager.GetConnection())
                 {
-                    connection.Open();
+                    await connection.OpenAsync().ConfigureAwait(false);
 
                     DbTransaction transaction =
                         connection.BeginTransaction();
@@ -510,7 +516,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                                 "@AccountNumber",
                                 fromAccount.AccountNumber);
 
-                            command.ExecuteNonQuery();
+                            await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                             command.Parameters[
                                 "@Balance"].Value =
@@ -520,7 +526,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                                 "@AccountNumber"].Value =
                                 toAccount.AccountNumber;
 
-                            command.ExecuteNonQuery();
+                            await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                         }
 
                         transaction.Commit();

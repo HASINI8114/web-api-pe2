@@ -13,16 +13,22 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
     public class TransactionRepositoryDB : ITransactionRepository
     {
-        public List<ViewRecentTransactionsResponseDto> GetRecentTransactions(
+        private readonly IDataBaseConnectionManager _connectionManager;
+
+        public TransactionRepositoryDB(IDataBaseConnectionManager connectionManager)
+        {
+            _connectionManager = connectionManager;
+        }
+        public async Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(
             string accountNumber)
         {
             List<ViewRecentTransactionsResponseDto> transactions =
                 new List<ViewRecentTransactionsResponseDto>();
 
             using (DbConnection connection =
-                   DataBaseConnectionManager.GetConnection())
+                   _connectionManager.GetConnection())
             {
-                connection.Open();
+                await connection.OpenAsync().ConfigureAwait(false);
 
                 using (DbCommand command =
                        connection.CreateCommand())
@@ -36,9 +42,9 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                         accountNumber);
 
                     using (DbDataReader reader =
-                           command.ExecuteReader())
+                           await command.ExecuteReaderAsync().ConfigureAwait(false))
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync().ConfigureAwait(false))
                         {
                             ViewRecentTransactionsResponseDto transaction =
                                 new ViewRecentTransactionsResponseDto();
@@ -99,7 +105,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         }
 
 
-        public void SaveTransaction(
+        public async Task SaveTransactionAsync(
             string fromAccountNumber,
             string toAccountNumber,
             TransactionType transactionType,
@@ -109,9 +115,9 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             decimal balanceAfterTo)
         {
             using (DbConnection connection =
-                   DataBaseConnectionManager.GetConnection())
+                   _connectionManager.GetConnection())
             {
-                connection.Open();
+                await connection.OpenAsync().ConfigureAwait(false);
 
                 using (DbCommand command =
                        connection.CreateCommand())
@@ -158,7 +164,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                         "@BalanceAfterTo",
                         balanceAfterTo);
 
-                    command.ExecuteNonQuery();
+                    await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                 }
             }
         }

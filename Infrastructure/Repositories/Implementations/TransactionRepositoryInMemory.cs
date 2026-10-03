@@ -14,9 +14,9 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
     {
         private readonly DataSet _dataSet;
 
-        public TransactionRepositoryInMemory()
+        public TransactionRepositoryInMemory(IGDBInMemoryDataStore gDBInMemoryDataStore)
         {
-            _dataSet =GDBInMemoryDataStore.DataSet;
+            _dataSet =gDBInMemoryDataStore.DataSet;
         }
 
 
@@ -24,8 +24,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         // GET RECENT TRANSACTIONS
         // =========================================================
 
-        public List<ViewRecentTransactionsResponseDto>
-            GetRecentTransactions(string accountNumber)
+        public async Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(string accountNumber)
         {
             List<ViewRecentTransactionsResponseDto> transactions =
                 new List<ViewRecentTransactionsResponseDto>();
@@ -116,7 +115,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         // SAVE TRANSACTION
         // =========================================================
 
-        public void SaveTransaction(
+        public async Task SaveTransactionAsync(
             string fromAccountNumber,
             string toAccountNumber,
             TransactionType transactionType,

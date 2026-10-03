@@ -15,13 +15,20 @@ using Microsoft.Extensions.Logging;
 
 namespace GDB.Api.Infrastructure.Repositories
 {
-    class AccountRepositoryFactory
+    class AccountRepositoryFactory: IAccountRepositoryFactory
     {
         private static readonly ILogger _logger = AppLogger.CreateLogger<AccountRepositoryFactory>();
 
+        private readonly IDataBaseConnectionManager _connectionManager;
+        private readonly IGDBInMemoryDataStore _gDBInMemoryDataStore;
 
+        public AccountRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore)
+        {
+            _connectionManager = connectionManager;
+            _gDBInMemoryDataStore = gDBInMemoryDataStore;
+        }
 
-        public static IAccountRepository Create(string choice)
+        public IAccountRepository Create(string choice)
         {
 
 
@@ -30,11 +37,11 @@ namespace GDB.Api.Infrastructure.Repositories
 
             if (choice.Equals("DB"))
 
-                repository = new AccountRepositoryDB();
+                repository = new AccountRepositoryDB(_connectionManager);
 
             else if (choice.Equals("InMemory"))
 
-                repository = new AccountRepositoryInMemory();
+                repository = new AccountRepositoryInMemory(_gDBInMemoryDataStore);
 
             else
                 _logger.LogWarning("Unknown account repository choice {Choice}; returning null", choice);

@@ -22,7 +22,7 @@ namespace GDB.Api.Application.Controllers
 
         // POST: api/v1/transactions/deposit
         [HttpPost(ApiConstants.Deposit)]
-        public async Task<IActionResult> Deposit(
+        public async Task<IActionResult> DepositAsync(
             [FromBody] TransactionDto transactionDto)
         {
             if (transactionDto == null)
@@ -49,14 +49,14 @@ namespace GDB.Api.Application.Controllers
 
         // POST: api/v1/transactions/withdraw
         [HttpPost(ApiConstants.Withdraw)]
-        public async Task<IActionResult> Withdraw(
+        public async Task<IActionResult> WithdrawAsync(
             [FromBody] TransactionDto transactionDto)
         {
             if (transactionDto == null)
                 return BadRequest("Transaction data is required.");
 
             if (string.IsNullOrWhiteSpace(transactionDto.AccountNumber))
-                return BadRequest("Account number is required.");
+                return BadRequest("From Account number is required.");
 
             if (transactionDto.Amount <= 0)
                 return BadRequest("Amount must be greater than zero.");
@@ -79,7 +79,7 @@ namespace GDB.Api.Application.Controllers
 
         // POST: api/v1/transactions/transfer
         [HttpPost(ApiConstants.Transfer)]
-        public async Task<IActionResult> Transfer(
+        public async Task<IActionResult> TransferAsync(
             [FromBody] TransactionDto transactionDto)
         {
             if (transactionDto == null)

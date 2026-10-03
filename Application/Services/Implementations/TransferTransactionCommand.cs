@@ -94,12 +94,12 @@ namespace GDB.Api.Application.Services.Implementations
                 transactionDto.Amount);
 
             // Save both accounts
-            _accountRepository.SaveAccounts(
+            await _accountRepository.SaveAccountsAsync(
                 fromAccount,
                 toAccount);
 
             // Save transaction
-            _transactionRepository.SaveTransaction(
+            await _transactionRepository.SaveTransactionAsync(
                 transactionDto.FromAccount,
                 transactionDto.ToAccount,
                 TransactionType.Transfer,
@@ -131,7 +131,7 @@ namespace GDB.Api.Application.Services.Implementations
                 ToAccountBalance =
                     toAccount.Balance,
 
-                TransactionStat =
+                TransactionStatus =
                     TransactionStatus.Success
             };
         }

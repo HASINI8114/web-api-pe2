@@ -2,24 +2,31 @@
 using System.Configuration;
 using System.Data.Common;
 using gdb.Logging;
+using GDB.Api.Infrastructure.Repositories.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace GDB.Api.Infrastructure.Repositories
 {
-    public class DataBaseConnectionManager
+    public class DataBaseConnectionManager: IDataBaseConnectionManager
     {
+        private readonly IConfiguration _configuration;
         private static readonly ILogger _logger =
             AppLogger.CreateLogger<DataBaseConnectionManager>();
 
-        private static IConfiguration _configuration;
+        //private static IConfiguration _configuration;
 
-        public static void Initialize(IConfiguration configuration)
+        //public static void Initialize(IConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
+
+        public DataBaseConnectionManager(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public static DbConnection GetConnection()
+        public DbConnection GetConnection()
         {
             DataBaseProviderRegistration.Register(_configuration);
 
@@ -35,7 +42,16 @@ namespace GDB.Api.Infrastructure.Repositories
                     "Connection string 'GDBConnection' not found.");
             }
 
-            string providerName = "Microsoft.Data.SqlClient";
+            string providerName = _configuration["Database:ProviderName"];
+
+            if (string.IsNullOrWhiteSpace(providerName))
+            {
+                _logger.LogError(
+                    "Database provider name is missing.");
+
+                throw new ConfigurationErrorsException(
+                    "Database provider name not found.");
+            }
 
             try
             {

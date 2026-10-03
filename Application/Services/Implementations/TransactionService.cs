@@ -8,8 +8,14 @@ namespace GDB.Api.Application.Services.Implementations
 {
     public class TransactionService : ITransactionService
     {
+        private readonly ITransactionCommandFactory _transactionCommandFactory;
         private static readonly ILogger _logger =
             AppLogger.CreateLogger<TransactionService>();
+
+        public TransactionService(ITransactionCommandFactory transactionCommandFactory)
+        {
+            _transactionCommandFactory = transactionCommandFactory;
+        }
 
         public async Task<TResponse> ProcessTransactionAsync<TResponse>(
             TransactionDto transactionDto,
@@ -20,7 +26,7 @@ namespace GDB.Api.Application.Services.Implementations
                 transactionType);
 
             ITransactionCommand<TResponse> command =
-                TransactionCommandFactory.Create<TResponse>(transactionType);
+                _transactionCommandFactory.Create<TResponse>(transactionType);
 
             TResponse response =
                 await command.ExecuteAsync(transactionDto);
