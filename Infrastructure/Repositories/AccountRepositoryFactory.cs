@@ -1,5 +1,4 @@
-﻿using gdb.Logging;
-using GDB.Api.Domain;
+﻿using GDB.Api.Domain;
 using GDB.Api.Domain.Enums;
 using GDB.Api.Domain.Exceptions;
 using GDB.Api.Domain.Models;
@@ -25,8 +24,10 @@ namespace GDB.Api.Infrastructure.Repositories
         private readonly IAccountFactory _accountFactory;
         private readonly string _choice;
 
-        public AccountRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore, IAccountFactory accountFactory, IConfiguration configuration)
+        public AccountRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore, IAccountFactory accountFactory, IConfiguration configuration, ILogger<AccountRepositoryFactory> logger, ILoggerFactory loggerFactory)
         {
+            _logger = logger;
+            _loggerFactory = loggerFactory;
             _connectionManager = connectionManager;
             _gDBInMemoryDataStore = gDBInMemoryDataStore;
             _accountFactory = accountFactory;

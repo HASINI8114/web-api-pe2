@@ -11,13 +11,13 @@ namespace GDB.Api.Application.Services.Implementations
     {
         private readonly ITransactionCommandFactory _transactionCommandFactory;
         private readonly ITransactionRepository _transactionRepository; 
-        private static readonly ILogger _logger =
-            AppLogger.CreateLogger<TransactionService>();
+        private readonly ILogger<TransactionService> _logger;
 
-        public TransactionService(ITransactionCommandFactory transactionCommandFactory, ITransactionRepositoryFactory transactionRepositoryfactory)
+        public TransactionService(ITransactionCommandFactory transactionCommandFactory, ITransactionRepositoryFactory transactionRepositoryfactory, ILogger<TransactionService> logger)
         {
             _transactionCommandFactory = transactionCommandFactory;
             _transactionRepository = transactionRepositoryfactory.Create(); 
+            _logger = logger;
         }
 
         public async Task<TResponse> ProcessTransactionAsync<TResponse>(
