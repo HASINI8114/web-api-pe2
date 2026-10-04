@@ -65,9 +65,6 @@ builder.Services.AddScoped<IAccountRepositoryFactory, AccountRepositoryFactory>(
 // Register TransactionService
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
-// Register TransactionQueryService
-builder.Services.AddScoped<ITransactionQueryService, TransactionQueryService>();
-
 // Register TransactionRepositoryFactory
 builder.Services.AddScoped<ITransactionRepositoryFactory, TransactionRepositoryFactory>();
 

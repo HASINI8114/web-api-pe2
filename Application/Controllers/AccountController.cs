@@ -13,14 +13,10 @@ namespace GDB.Api.Application.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly ITransactionQueryService _transactionQueryService;
 
-        public AccountController(
-            IAccountService accountService,
-            ITransactionQueryService transactionQueryService)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _transactionQueryService = transactionQueryService;
         }
 
         // GET: api/v1/accounts
@@ -62,18 +58,6 @@ namespace GDB.Api.Application.Controllers
             var account = await _accountService.ViewAccountAsync(accNo);
 
             return Ok(account);
-        }
-
-        // GET: api/v1/accounts/{accNo}/transactions
-        [HttpGet(ApiConstants.AccountTransactions)]
-        public async Task<IActionResult> GetRecentTransactionsAsync(string accNo)
-        {
-            if (string.IsNullOrWhiteSpace(accNo))
-                return BadRequest("Account number is required.");
-
-            var transactions = await _transactionQueryService.GetRecentTransactionsAsync(accNo);
-
-            return Ok(transactions);
         }
 
         // POST: api/v1/accounts
