@@ -82,6 +82,10 @@ namespace GDB.Api.Application.Services.Implementations
             if (!fromAccount.ValidatePin(
                     transactionDto.Pin))
             {
+                _logger.LogWarning(
+                    "Transfer failed: invalid PIN for account {AccountNumber}",
+                    transactionDto.FromAccount);
+
                 throw new InvalidPinException("Invalid PIN.");
             }
 

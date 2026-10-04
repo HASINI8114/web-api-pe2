@@ -14,97 +14,107 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
     public class TransactionRepositoryDB : ITransactionRepository
     {
         private readonly IDataBaseConnectionManager _connectionManager;
+        private readonly ILogger<TransactionRepositoryDB> _logger;
 
-        public TransactionRepositoryDB(IDataBaseConnectionManager connectionManager)
+        public TransactionRepositoryDB(IDataBaseConnectionManager connectionManager, ILogger<TransactionRepositoryDB> logger)
         {
             _connectionManager = connectionManager;
+            _logger = logger;
         }
         public async Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(
             ViewRecentTransactionsRequestDto requestDto)
         {
-            List<ViewRecentTransactionsResponseDto> transactions =
-                new List<ViewRecentTransactionsResponseDto>();
-
-            using (DbConnection connection =
-                   _connectionManager.GetConnection())
+            try
             {
-                await connection.OpenAsync().ConfigureAwait(false);
+                List<ViewRecentTransactionsResponseDto> transactions =
+                    new List<ViewRecentTransactionsResponseDto>();
 
-                using (DbCommand command =
-                       connection.CreateCommand())
+                using (DbConnection connection =
+                       _connectionManager.GetConnection())
                 {
-                    command.CommandText =
-                        TransactionQueries.GetRecentTransactions;
+                    await connection.OpenAsync().ConfigureAwait(false);
 
-                    int offset = (requestDto.PageNumber - 1) * requestDto.PageSize;
-
-                    AddParameter(command, "@AccountNumber", requestDto.AccountNumber);
-
-                    AddParameter(command, "@Offset", offset);
-
-                    AddParameter(command, "@PageSize", requestDto.PageSize);
-
-                    using (DbDataReader reader =
-                           await command.ExecuteReaderAsync().ConfigureAwait(false))
+                    using (DbCommand command =
+                           connection.CreateCommand())
                     {
-                        while (await reader.ReadAsync().ConfigureAwait(false))
+                        command.CommandText =
+                            TransactionQueries.GetRecentTransactions;
+
+                        int offset = (requestDto.PageNumber - 1) * requestDto.PageSize;
+
+                        AddParameter(command, "@AccountNumber", requestDto.AccountNumber);
+
+                        AddParameter(command, "@Offset", offset);
+
+                        AddParameter(command, "@PageSize", requestDto.PageSize);
+
+                        using (DbDataReader reader =
+                               await command.ExecuteReaderAsync().ConfigureAwait(false))
                         {
-                            ViewRecentTransactionsResponseDto transaction =
-                                new ViewRecentTransactionsResponseDto();
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                ViewRecentTransactionsResponseDto transaction =
+                                    new ViewRecentTransactionsResponseDto();
 
-                            transaction.TransactionId =
-                                Convert.ToInt32(
-                                    reader["TransactionId"]);
+                                transaction.TransactionId =
+                                    Convert.ToInt32(
+                                        reader["TransactionId"]);
 
-                            transaction.FromAccountNumber =
-                                reader["FromAccountNumber"] == DBNull.Value
-                                    ? null
-                                    : reader["FromAccountNumber"].ToString();
+                                transaction.FromAccountNumber =
+                                    reader["FromAccountNumber"] == DBNull.Value
+                                        ? null
+                                        : reader["FromAccountNumber"].ToString();
 
-                            transaction.ToAccountNumber =
-                                reader["ToAccountNumber"] == DBNull.Value
-                                    ? null
-                                    : reader["ToAccountNumber"].ToString();
+                                transaction.ToAccountNumber =
+                                    reader["ToAccountNumber"] == DBNull.Value
+                                        ? null
+                                        : reader["ToAccountNumber"].ToString();
 
-                            transaction.Amount =
-                                Convert.ToDecimal(
-                                    reader["Amount"]);
+                                transaction.Amount =
+                                    Convert.ToDecimal(
+                                        reader["Amount"]);
 
-                            transaction.TransactionType =
-                                (TransactionType)Enum.Parse(
-                                    typeof(TransactionType),
-                                    reader["TransactionType"].ToString(),
-                                    true);
+                                transaction.TransactionType =
+                                    (TransactionType)Enum.Parse(
+                                        typeof(TransactionType),
+                                        reader["TransactionType"].ToString(),
+                                        true);
 
-                            transaction.TransactionStatus =
-                                (TransactionStatus)Enum.Parse(
-                                    typeof(TransactionStatus),
-                                    reader["TransactionStatus"].ToString(),
-                                    true);
+                                transaction.TransactionStatus =
+                                    (TransactionStatus)Enum.Parse(
+                                        typeof(TransactionStatus),
+                                        reader["TransactionStatus"].ToString(),
+                                        true);
 
-                            transaction.Timestamp =
-                                Convert.ToDateTime(
-                                    reader["Timestamp"]);
+                                transaction.Timestamp =
+                                    Convert.ToDateTime(
+                                        reader["Timestamp"]);
 
-                            transaction.BalanceAfterFrom =
-                                reader["BalanceAfterFrom"] == DBNull.Value
-                                    ? null
-                                    : Convert.ToDecimal(
-                                        reader["BalanceAfterFrom"]);
+                                transaction.BalanceAfterFrom =
+                                    reader["BalanceAfterFrom"] == DBNull.Value
+                                        ? null
+                                        : Convert.ToDecimal(
+                                            reader["BalanceAfterFrom"]);
 
-                            transaction.BalanceAfterTo =
-                                reader["BalanceAfterTo"] == DBNull.Value
-                                    ? null
-                                    : Convert.ToDecimal(
-                                        reader["BalanceAfterTo"]);
+                                transaction.BalanceAfterTo =
+                                    reader["BalanceAfterTo"] == DBNull.Value
+                                        ? null
+                                        : Convert.ToDecimal(
+                                            reader["BalanceAfterTo"]);
 
-                            transactions.Add(transaction);
+                                transactions.Add(transaction);
+                            }
                         }
                     }
                 }
-            }
 
-            return transactions;
+                return transactions;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch recent transactions for account {AccountNumber}", requestDto.AccountNumber);
+                throw;
+            }
         }
 
 
@@ -117,58 +127,73 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             decimal balanceAfterFrom,
             decimal balanceAfterTo)
         {
-            using (DbConnection connection =
-                   _connectionManager.GetConnection())
+            try
             {
-                await connection.OpenAsync().ConfigureAwait(false);
-
-                using (DbCommand command =
-                       connection.CreateCommand())
+                using (DbConnection connection =
+                       _connectionManager.GetConnection())
                 {
-                    command.CommandText =
-                        TransactionQueries.InsertTransaction;
+                    await connection.OpenAsync().ConfigureAwait(false);
 
-                    AddParameter(
-                        command,
-                        "@TransactionType",
-                        transactionType.ToString().ToUpper());
+                    using (DbCommand command =
+                           connection.CreateCommand())
+                    {
+                        command.CommandText =
+                            TransactionQueries.InsertTransaction;
 
-                    AddParameter(
-                        command,
-                        "@FromAccountNumber",
-                        string.IsNullOrEmpty(fromAccountNumber)
-                            ? (object)DBNull.Value
-                            : fromAccountNumber);
+                        AddParameter(
+                            command,
+                            "@TransactionType",
+                            transactionType.ToString().ToUpper());
 
-                    AddParameter(
-                        command,
-                        "@ToAccountNumber",
-                        string.IsNullOrEmpty(toAccountNumber)
-                            ? (object)DBNull.Value
-                            : toAccountNumber);
+                        AddParameter(
+                            command,
+                            "@FromAccountNumber",
+                            string.IsNullOrEmpty(fromAccountNumber)
+                                ? (object)DBNull.Value
+                                : fromAccountNumber);
 
-                    AddParameter(
-                        command,
-                        "@Amount",
-                        amount);
+                        AddParameter(
+                            command,
+                            "@ToAccountNumber",
+                            string.IsNullOrEmpty(toAccountNumber)
+                                ? (object)DBNull.Value
+                                : toAccountNumber);
 
-                    AddParameter(
-                        command,
-                        "@TransactionStatus",
-                        transactionStatus.ToString().ToUpper());
+                        AddParameter(
+                            command,
+                            "@Amount",
+                            amount);
 
-                    AddParameter(
-                        command,
-                        "@BalanceAfterFrom",
-                        balanceAfterFrom);
+                        AddParameter(
+                            command,
+                            "@TransactionStatus",
+                            transactionStatus.ToString().ToUpper());
 
-                    AddParameter(
-                        command,
-                        "@BalanceAfterTo",
-                        balanceAfterTo);
+                        AddParameter(
+                            command,
+                            "@BalanceAfterFrom",
+                            balanceAfterFrom);
 
-                    await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        AddParameter(
+                            command,
+                            "@BalanceAfterTo",
+                            balanceAfterTo);
+
+                        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Balances are already persisted by the caller; this record is needed to reconcile manually
+                _logger.LogError(
+                    ex,
+                    "Failed to save {TransactionType} transaction of {Amount} from {FromAccount} to {ToAccount}",
+                    transactionType,
+                    amount,
+                    fromAccountNumber,
+                    toAccountNumber);
+                throw;
             }
         }
 
