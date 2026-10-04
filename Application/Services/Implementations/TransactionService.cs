@@ -1,7 +1,6 @@
 ﻿using GDB.Api.Application.Dtos;
 using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Domain.Enums;
-using gdb.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace GDB.Api.Application.Services.Implementations
@@ -9,12 +8,12 @@ namespace GDB.Api.Application.Services.Implementations
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionCommandFactory _transactionCommandFactory;
-        private static readonly ILogger _logger =
-            AppLogger.CreateLogger<TransactionService>();
+        private readonly ILogger<TransactionService> _logger;
 
-        public TransactionService(ITransactionCommandFactory transactionCommandFactory)
+        public TransactionService(ITransactionCommandFactory transactionCommandFactory, ILogger<TransactionService> logger)
         {
             _transactionCommandFactory = transactionCommandFactory;
+            _logger = logger;
         }
 
         public async Task<TResponse> ProcessTransactionAsync<TResponse>(
