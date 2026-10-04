@@ -24,6 +24,8 @@ namespace GDB.Api.Common.Constants
         public const string AccountBalance = "{accNo}/balance";
         // GET    /api/v1/accounts/{accNo}/view   -> view account details
         public const string AccountView = "{accNo}/view";
+        // GET    /api/v1/accounts/{accNo}/transactions -> view recent transactions
+        public const string AccountTransactions = "{accNo}/transactions";
         // POST   /api/v1/accounts/close          -> close account
         public const string CloseAccount = "close";
         #endregion
