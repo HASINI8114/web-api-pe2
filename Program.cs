@@ -6,6 +6,7 @@ using GDB.Api.Common.Constants;
 using GDB.Api.Common.ExceptionHandling;
 using GDB.Api.Common.Extensions;
 using GDB.Api.Data;
+using GDB.Api.Domain;
 using GDB.Api.Infrastructure.Repositories;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using Serilog;
@@ -54,6 +55,9 @@ builder.Services.AddSingleton<IGDBInMemoryDataStore, GDBInMemoryDataStore>();
 
 // Register AccountService
 builder.Services.AddScoped<IAccountService, AccountService>();
+
+// Register AccountFactory
+builder.Services.AddScoped<IAccountFactory, AccountFactory>();
 
 // Register AccountRepositoryFactory
 builder.Services.AddScoped<IAccountRepositoryFactory, AccountRepositoryFactory>();

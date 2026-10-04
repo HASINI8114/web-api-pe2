@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 namespace GDB.Api.Domain;
-public class AccountFactory
+public class AccountFactory: IAccountFactory
 {
-    public static Account CreateAccount(AccountType accountType,
+    public Account CreateAccount(AccountType accountType,
                                         string accountNumber,
                                         string name,
                                         int age,

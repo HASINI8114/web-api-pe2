@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GDB.Api.Application.Dtos
+namespace GDB.Api.Application.Dtos.Response
 {
-    public class CloseAccountRequestDto
+    public class ViewAccountResponseDto
     {
         public string AccountNumber { get; set; }
+        public string Name { get; set; }
+        public decimal Balance { get; set; }
+
     }
 }

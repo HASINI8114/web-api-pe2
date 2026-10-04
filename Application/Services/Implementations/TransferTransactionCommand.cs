@@ -1,4 +1,6 @@
-﻿using GDB.Api.Application.Dtos;
+﻿using gdb.Logging;
+using GDB.Api.Application.Dtos.Request;
+using GDB.Api.Application.Dtos.Response;
 using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Domain.Enums;
 using GDB.Api.Domain.Exceptions;
@@ -68,20 +70,20 @@ namespace GDB.Api.Application.Services.Implementations
             // Check sender is active
             if (!fromAccount.CheckIfAccountIsActive())
             {
-                throw new InactiveAccountException();
+                throw new InactiveAccountException("From account is inactive");
             }
 
             // Check receiver is active
             if (!toAccount.CheckIfAccountIsActive())
             {
-                throw new InactiveAccountException();
+                throw new InactiveAccountException("To account is inactive");
             }
 
             // Check PIN
             if (!fromAccount.ValidatePin(
                     transactionDto.Pin))
             {
-                throw new InvalidPinException();
+                throw new InvalidPinException("Invalid PIN.");
             }
 
             // Withdraw from sender

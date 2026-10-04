@@ -2,6 +2,6 @@
 {
     public interface ITransactionRepositoryFactory
     {
-        public ITransactionRepository Create(string type);
+        public ITransactionRepository Create();
     }
 }
