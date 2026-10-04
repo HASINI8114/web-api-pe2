@@ -1,4 +1,3 @@
-using gdb.Logging;
 using GDB.Api.Application.Dtos.Request;
 using GDB.Api.Application.Dtos.Response;
 using GDB.Api.Application.Services.Contracts;

@@ -10,13 +10,16 @@ namespace GDB.Api.Infrastructure.Repositories
         private readonly IDataBaseConnectionManager _connectionManager;
         private readonly IGDBInMemoryDataStore _gDBInMemoryDataStore;
         private readonly string _choice;
-        public TransactionRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore, IConfiguration configuration)
+        private readonly ILogger<TransactionRepositoryFactory> _logger;
+
+        public TransactionRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore, IConfiguration configuration, ILogger<TransactionRepositoryFactory> logger)
         {
             _connectionManager = connectionManager;
             _gDBInMemoryDataStore = gDBInMemoryDataStore;
             _choice = configuration["AppSettings:ConnectionChoice"];
+            _logger = logger;
         }
-        private static readonly ILogger _logger = AppLogger.CreateLogger("GDB.App.Infrastructure.Repositories.TransactionRepositoryFactory");
+
         public ITransactionRepository Create()
         {
             if (_choice.Equals("DB"))

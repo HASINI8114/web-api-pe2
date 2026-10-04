@@ -64,11 +64,12 @@ namespace GDB.Api.Application.Services.Implementations
         /// The repository is configured to use the database ("DB") as the data source,
         /// allowing for abstraction of the underlying data storage mechanism.
         /// </remarks>
-        public AccountService(IAccountRepositoryFactory _accountRepositoryfactory, IAccountFactory accountFactory)
+        public AccountService(IAccountRepositoryFactory _accountRepositoryfactory, IAccountFactory accountFactory, ILogger<AccountService> logger)
         {
             // Repository is created via factory pattern for loose coupling
             _accountRepository = _accountRepositoryfactory.Create();
             _accountFactory = accountFactory;
+            _logger = logger;
         }
 
 
