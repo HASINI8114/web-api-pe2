@@ -54,9 +54,20 @@ namespace GDB.Api.Application.Services.Implementations
             // amount validation,
             // balance validation,
             // account-specific withdrawal rules.
-            account.Withdraw(
-                transactionDto.Amount,
-                transactionDto.Pin);
+            try
+            {
+                account.Withdraw(
+                    transactionDto.Amount,
+                    transactionDto.Pin);
+            }
+            catch (InvalidPinException)
+            {
+                _logger.LogWarning(
+                    "Withdraw failed: invalid PIN for account {AccountNumber}",
+                    transactionDto.AccountNumber);
+
+                throw;
+            }
 
             // Update balance
             await _accountRepository.UpdateBalanceAsync(
