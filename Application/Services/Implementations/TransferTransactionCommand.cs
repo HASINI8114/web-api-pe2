@@ -22,15 +22,16 @@ namespace GDB.Api.Application.Services.Implementations
         private readonly IAccountRepository _accountRepository;
         private readonly ITransactionRepository _transactionRepository;
 
-        private static readonly ILogger _logger =
-            AppLogger.CreateLogger<TransferTransactionCommand>();
+        private readonly ILogger<TransferTransactionCommand> _logger;
 
         public TransferTransactionCommand(
             IAccountRepository accountRepository,
-            ITransactionRepository transactionRepository)
+            ITransactionRepository transactionRepository,
+            ILogger<TransferTransactionCommand> logger)
         {
             _accountRepository = accountRepository;
             _transactionRepository = transactionRepository;
+            _logger = logger;
         }
 
         public async Task<TranferFundsResponseDto> ExecuteAsync(

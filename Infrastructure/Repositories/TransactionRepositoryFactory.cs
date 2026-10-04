@@ -1,6 +1,5 @@
 ﻿using GDB.Api.Infrastructure.Repositories.Contracts;
 using GDB.Api.Infrastructure.Repositories.Implementations;
-using gdb.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace GDB.Api.Infrastructure.Repositories

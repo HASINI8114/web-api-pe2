@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.Common;
-using gdb.Logging;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -11,8 +10,7 @@ namespace GDB.Api.Infrastructure.Repositories
     public class DataBaseConnectionManager: IDataBaseConnectionManager
     {
         private readonly IConfiguration _configuration;
-        private static readonly ILogger _logger =
-            AppLogger.CreateLogger<DataBaseConnectionManager>();
+        private readonly ILogger<DataBaseConnectionManager> _logger;
 
         //private static IConfiguration _configuration;
 
@@ -21,14 +19,15 @@ namespace GDB.Api.Infrastructure.Repositories
         //    _configuration = configuration;
         //}
 
-        public DataBaseConnectionManager(IConfiguration configuration)
+        public DataBaseConnectionManager(IConfiguration configuration, ILogger<DataBaseConnectionManager> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public DbConnection GetConnection()
         {
-            DataBaseProviderRegistration.Register(_configuration);
+            DataBaseProviderRegistration.Register(_configuration, _logger);
 
             string connectionString =
                 _configuration.GetConnectionString("GDBConnection");

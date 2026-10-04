@@ -1,6 +1,5 @@
 ﻿using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Domain.Enums;
-using gdb.Logging;
 using Microsoft.Extensions.Logging;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using GDB.Api.Application.Dtos.Request;

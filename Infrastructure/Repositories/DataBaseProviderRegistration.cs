@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.Common;
-using gdb.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -9,18 +8,15 @@ namespace GDB.Api.Infrastructure.Repositories
 {
     public class DataBaseProviderRegistration
     {
-        private static readonly ILogger _logger =
-            AppLogger.CreateLogger<DataBaseProviderRegistration>();
-
-        public static void Register(IConfiguration configuration)
+        public static void Register(IConfiguration configuration, ILogger logger)
         {
             try
             {
-                RegisterProvider(configuration);
+                RegisterProvider(configuration, logger);
             }
             catch (Exception ex)
             {
-                _logger.LogError(
+                logger.LogError(
                     ex,
                     "Failed to register DB provider factory");
 
@@ -29,14 +25,15 @@ namespace GDB.Api.Infrastructure.Repositories
         }
 
         private static void RegisterProvider(
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILogger logger)
         {
             string factoryTypeName =
                 configuration["AppSettings:ProviderFactory"];
 
             if (string.IsNullOrWhiteSpace(factoryTypeName))
             {
-                _logger.LogError(
+                logger.LogError(
                     "AppSetting 'ProviderFactory' is missing.");
 
                 throw new ConfigurationErrorsException(
@@ -74,7 +71,7 @@ namespace GDB.Api.Infrastructure.Repositories
                 "Microsoft.Data.SqlClient",
                 factory);
 
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Registered DB provider {ProviderName}",
                 "Microsoft.Data.SqlClient");
         }

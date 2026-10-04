@@ -12,7 +12,6 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using gdb.Logging;
 using Microsoft.Extensions.Logging;
 using GDB.Api.Application.Dtos.Request;
 using GDB.Api.Application.Dtos.Response;
@@ -55,7 +54,7 @@ namespace GDB.Api.Application.Services.Implementations
         /// <summary>
         /// Logger instance used for logging account service operations.
         /// </summary>
-        private static readonly ILogger _logger = AppLogger.CreateLogger<AccountService>();
+        private readonly ILogger<AccountService> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountService"/> class.
