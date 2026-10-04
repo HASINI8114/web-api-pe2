@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using GDB.Api.Domain.Enums;
 
-namespace GDB.Api.Application.Dtos
+namespace GDB.Api.Application.Dtos.Response
 {
-    public class DepositResponseDto
+    public class WithdrawResponseDto
     {
-        public decimal Balance { get; set; }
+        public decimal Balance  { get; set; }
 
         public TransactionStatus TransactionStat { get; set; }
     }

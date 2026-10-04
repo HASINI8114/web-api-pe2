@@ -1,12 +1,13 @@
-﻿using GDB.Api.Application.Dtos;
+﻿using GDB.Api.Application.Dtos.Request;
+using GDB.Api.Application.Dtos.Response;
 using GDB.Api.Data;
 using GDB.Api.Domain.Enums;
+using GDB.Api.Infrastructure.Repositories;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using GDB.Api.Infrastructure.Repositories;
 
 namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
@@ -24,7 +25,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
         // GET RECENT TRANSACTIONS
         // =========================================================
 
-        public async Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(string accountNumber)
+        public async Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(ViewRecentTransactionsRequestDto requestDto)
         {
             List<ViewRecentTransactionsResponseDto> transactions =
                 new List<ViewRecentTransactionsResponseDto>();
@@ -40,7 +41,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                         &&
                         row.Field<string>(
                             "FromAccountNumber")
-                            == accountNumber
+                            == requestDto.AccountNumber
                     )
                     ||
                     (
@@ -48,12 +49,13 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                         &&
                         row.Field<string>(
                             "ToAccountNumber")
-                            == accountNumber
+                            == requestDto.AccountNumber
                     )
                 )
                 .OrderByDescending(row =>
                     row.Field<DateTime>("Timestamp"))
-                .Take(10);
+                .Skip((requestDto.PageNumber - 1) * requestDto.PageSize)
+                .Take(requestDto.PageSize);
 
 
             foreach (DataRow row in rows)

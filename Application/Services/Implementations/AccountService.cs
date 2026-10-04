@@ -1,5 +1,4 @@
-﻿using GDB.Api.Application.Dtos;
-using GDB.Api.Application.Services.Contracts;
+﻿using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Domain;
 using GDB.Api.Domain.Enums;
 using GDB.Api.Domain.Models;
@@ -15,6 +14,8 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using gdb.Logging;
 using Microsoft.Extensions.Logging;
+using GDB.Api.Application.Dtos.Request;
+using GDB.Api.Application.Dtos.Response;
 
 namespace GDB.Api.Application.Services.Implementations
 {
@@ -46,9 +47,10 @@ namespace GDB.Api.Application.Services.Implementations
         /// <summary>
         /// Provides data access operations for account entities.
         /// </summary>
-        /// 
-        private readonly string choice = "DB"; // This can be configured externally or via dependency injection
+        
         private readonly IAccountRepository _accountRepository;
+
+        private readonly IAccountFactory _accountFactory;
 
         /// <summary>
         /// Logger instance used for logging account service operations.
@@ -63,10 +65,11 @@ namespace GDB.Api.Application.Services.Implementations
         /// The repository is configured to use the database ("DB") as the data source,
         /// allowing for abstraction of the underlying data storage mechanism.
         /// </remarks>
-        public AccountService(IAccountRepositoryFactory _accountRepositoryfactory)
+        public AccountService(IAccountRepositoryFactory _accountRepositoryfactory, IAccountFactory accountFactory)
         {
             // Repository is created via factory pattern for loose coupling
-            _accountRepository = _accountRepositoryfactory.Create(choice);
+            _accountRepository = _accountRepositoryfactory.Create();
+            _accountFactory = accountFactory;
         }
 
 
@@ -337,7 +340,7 @@ namespace GDB.Api.Application.Services.Implementations
             }
 
             // Create appropriate account type using factory pattern
-            Account account = AccountFactory.CreateAccount(
+            Account account = _accountFactory.CreateAccount(
                 request.AccountType,
                 request.AccountNumber,
                 request.Name,

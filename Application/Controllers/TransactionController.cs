@@ -1,9 +1,11 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
-using GDB.Api.Application.Dtos;
+using GDB.Api.Application.Dtos.Request;
+using GDB.Api.Application.Dtos.Response;
 using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Common.Constants;
 using GDB.Api.Domain.Enums;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
 namespace GDB.Api.Application.Controllers
@@ -31,9 +33,6 @@ namespace GDB.Api.Application.Controllers
             if (string.IsNullOrWhiteSpace(transactionDto.AccountNumber))
                 return BadRequest("Account number is required.");
 
-            if (transactionDto.Amount <= 0)
-                return BadRequest("Amount must be greater than zero.");
-
             var result =
                 await _transactionService.ProcessTransactionAsync<DepositResponseDto>(
                     transactionDto,
@@ -58,11 +57,8 @@ namespace GDB.Api.Application.Controllers
             if (string.IsNullOrWhiteSpace(transactionDto.AccountNumber))
                 return BadRequest("From Account number is required.");
 
-            if (transactionDto.Amount <= 0)
-                return BadRequest("Amount must be greater than zero.");
-
-            if(transactionDto.Pin == null || transactionDto.Pin.Length != 4)
-                return BadRequest("PIN must be a 4-digit number.");
+            if(string.IsNullOrWhiteSpace(transactionDto.Pin))
+                return BadRequest("PIN is required.");
 
             var result =
                 await _transactionService.ProcessTransactionAsync<WithdrawResponseDto>(
@@ -91,11 +87,8 @@ namespace GDB.Api.Application.Controllers
             if (string.IsNullOrWhiteSpace(transactionDto.ToAccount))
                 return BadRequest("To Account number is required.");
 
-            if (transactionDto.Amount <= 0)
-                return BadRequest("Amount must be greater than zero.");
-
-            if (transactionDto.Pin == null || transactionDto.Pin.Length != 4)
-                return BadRequest("PIN must be a 4-digit number.");
+            if (string.IsNullOrWhiteSpace(transactionDto.Pin))
+                return BadRequest("PIN is required.");
 
 
             var result =
@@ -111,6 +104,16 @@ namespace GDB.Api.Application.Controllers
             return Ok(result);
         }
 
+        // GET: api/v1/transactions/recent
+        // GET /api/v1/transactions/recent?accountNumber=1000001001&pageNumber=1&pageSize=10
+        [HttpGet(ApiConstants.RecentTransactions)]
+        public async Task<IActionResult> GetRecentTransactionsAsync(
+            [FromQuery] ViewRecentTransactionsRequestDto requestDto)
+        {
 
+            var transactions = await _transactionService.GetRecentTransactionsAsync(requestDto);
+
+            return Ok(transactions);
+        }   
     }
 }

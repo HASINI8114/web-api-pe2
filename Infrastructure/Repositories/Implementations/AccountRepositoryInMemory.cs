@@ -21,9 +21,11 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
 
 
         private static DataSet _dataSet;
+        private readonly IAccountFactory _accountFactory;
 
-        public AccountRepositoryInMemory(IGDBInMemoryDataStore gDBInMemoryDataStore)
+        public AccountRepositoryInMemory(IGDBInMemoryDataStore gDBInMemoryDataStore, IAccountFactory accountFactory)
         {
+            _accountFactory = accountFactory;
 
             if (_dataSet == null)
             {
@@ -86,7 +88,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             };
 
             // Create the correct Account object
-            IAccount account = AccountFactory.CreateAccount(
+            IAccount account = _accountFactory.CreateAccount(
                 accountType,
                 number,
                 name,
@@ -163,7 +165,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     _ => throw new Exception("Invalid account privilege")
                 };
 
-                IAccount account = AccountFactory.CreateAccount(
+                IAccount account = _accountFactory.CreateAccount(
                     accountType,
                     number,
                     name,

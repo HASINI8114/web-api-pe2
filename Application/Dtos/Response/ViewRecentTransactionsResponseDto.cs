@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GDB.Api.Domain.Enums;
 
-namespace GDB.Api.Application.Dtos
+namespace GDB.Api.Application.Dtos.Response
 {
     public class ViewRecentTransactionsResponseDto
     {

@@ -2,8 +2,8 @@ using Asp.Versioning;
 using GDB.Api.Application.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using GDB.Api.Application.Dtos;
 using GDB.Api.Common.Constants;
+using GDB.Api.Application.Dtos.Request;
 
 namespace GDB.Api.Application.Controllers
 {

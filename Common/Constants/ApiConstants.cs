@@ -31,10 +31,15 @@ namespace GDB.Api.Common.Constants
         #region TransactionRoutes (relative to BaseTransactions)
         // POST   /api/v1/transactions/deposit    -> deposit
         public const string Deposit = "deposit";
+
         // POST   /api/v1/transactions/withdraw   -> withdraw
         public const string Withdraw = "withdraw";
+
         // POST   /api/v1/transactions/transfer   -> transfer funds
         public const string Transfer = "transfer";
+
+        // GET    /api/v1/transactions/recent      -> view recent transactions
+        public const string RecentTransactions = "recent";
         #endregion
 
         #region TemplateRoutes (relative to BaseTemplates)

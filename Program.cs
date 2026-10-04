@@ -4,6 +4,7 @@ using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Application.Services.Implementations;
 using GDB.Api.Common.Constants;
 using GDB.Api.Data;
+using GDB.Api.Domain;
 using GDB.Api.Infrastructure.Repositories;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 
@@ -43,6 +44,9 @@ builder.Services.AddSingleton<IGDBInMemoryDataStore, GDBInMemoryDataStore>();
 
 // Register AccountService
 builder.Services.AddScoped<IAccountService, AccountService>();
+
+// Register AccountFactory
+builder.Services.AddScoped<IAccountFactory, AccountFactory>();
 
 // Register AccountRepositoryFactory
 builder.Services.AddScoped<IAccountRepositoryFactory, AccountRepositoryFactory>();

@@ -1,17 +1,18 @@
-﻿using GDB.Api.Application.Dtos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GDB.Api.Domain.Enums;
+using GDB.Api.Application.Dtos.Response;
+using GDB.Api.Application.Dtos.Request;
 
 namespace GDB.Api.Infrastructure.Repositories.Contracts
 {
     public interface ITransactionRepository
     {
         Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(
-            string accountNumber);
+            ViewRecentTransactionsRequestDto request);
 
         Task SaveTransactionAsync(
            string fromAccountNumber,

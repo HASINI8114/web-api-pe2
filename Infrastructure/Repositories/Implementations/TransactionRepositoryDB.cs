@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using gdb.Logging;
 using Microsoft.Extensions.Logging;
-using GDB.Api.Application.Dtos;
 using GDB.Api.Domain.Enums;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using GDB.Api.Infrastructure.Repositories.Queries;
 using System.Data.Common;
+using GDB.Api.Application.Dtos.Response;
+using GDB.Api.Application.Dtos.Request;
 
 namespace GDB.Api.Infrastructure.Repositories.Implementations
 {
@@ -20,7 +21,7 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
             _connectionManager = connectionManager;
         }
         public async Task<List<ViewRecentTransactionsResponseDto>> GetRecentTransactionsAsync(
-            string accountNumber)
+            ViewRecentTransactionsRequestDto requestDto)
         {
             List<ViewRecentTransactionsResponseDto> transactions =
                 new List<ViewRecentTransactionsResponseDto>();
@@ -36,10 +37,13 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
                     command.CommandText =
                         TransactionQueries.GetRecentTransactions;
 
-                    AddParameter(
-                        command,
-                        "@AccountNumber",
-                        accountNumber);
+                    int offset = (requestDto.PageNumber - 1) * requestDto.PageSize;
+
+                    AddParameter(command, "@AccountNumber", requestDto.AccountNumber);
+
+                    AddParameter(command, "@Offset", offset);
+
+                    AddParameter(command, "@PageSize", requestDto.PageSize);
 
                     using (DbDataReader reader =
                            await command.ExecuteReaderAsync().ConfigureAwait(false))

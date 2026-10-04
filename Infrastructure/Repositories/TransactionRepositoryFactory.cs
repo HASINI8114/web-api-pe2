@@ -10,28 +10,31 @@ namespace GDB.Api.Infrastructure.Repositories
 
         private readonly IDataBaseConnectionManager _connectionManager;
         private readonly IGDBInMemoryDataStore _gDBInMemoryDataStore;
-
-        public TransactionRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore)
+        private readonly string _choice;
+        public TransactionRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore, IConfiguration configuration)
         {
             _connectionManager = connectionManager;
             _gDBInMemoryDataStore = gDBInMemoryDataStore;
+            _choice = configuration["AppSettings:ConnectionChoice"];
         }
         private static readonly ILogger _logger = AppLogger.CreateLogger("GDB.App.Infrastructure.Repositories.TransactionRepositoryFactory");
-
-        public ITransactionRepository Create(string type)
+        public ITransactionRepository Create()
         {
-            if (type == "DB")
+            if (_choice.Equals("DB"))
             {
                 return new TransactionRepositoryDB(_connectionManager);
             }
 
-            else if (type == "InMemory")
+            else if (_choice.Equals("InMemory"))
             {
                 return new TransactionRepositoryInMemory(_gDBInMemoryDataStore);
             }
-
-            _logger.LogError("Invalid transaction repository type {Type}", type);
-            throw new Exception("Invalid transaction repository type");
+            else 
+            {
+                _logger.LogError("Invalid transaction repository choice {Choice}", _choice);
+                throw new Exception("Invalid transaction repository type");
+            }
+            
         }
     }
 }

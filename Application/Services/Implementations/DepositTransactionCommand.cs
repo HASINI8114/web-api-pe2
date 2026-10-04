@@ -1,5 +1,6 @@
 ﻿using gdb.Logging;
-using GDB.Api.Application.Dtos;
+using GDB.Api.Application.Dtos.Request;
+using GDB.Api.Application.Dtos.Response;
 using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Domain.Enums;
 using GDB.Api.Domain.Exceptions;

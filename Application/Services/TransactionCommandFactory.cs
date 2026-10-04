@@ -28,10 +28,10 @@ namespace GDB.Api.Application.Services
             TransactionType transactionType)
         {
             IAccountRepository accountRepository =
-                _accountRepositoryFactory.Create("DB");
+                _accountRepositoryFactory.Create();
 
             ITransactionRepository transactionRepository =
-                _transactionRepositoryFactory.Create("DB");
+                _transactionRepositoryFactory.Create();
 
             return transactionType switch
             {

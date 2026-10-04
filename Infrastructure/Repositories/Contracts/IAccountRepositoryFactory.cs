@@ -2,6 +2,6 @@
 {
     public interface IAccountRepositoryFactory
     {
-        IAccountRepository Create(string choice);
+        IAccountRepository Create();
     }
 }

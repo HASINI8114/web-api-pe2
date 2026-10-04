@@ -1,4 +1,4 @@
-﻿using GDB.Api.Application.Dtos;
+﻿using GDB.Api.Application.Dtos.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
