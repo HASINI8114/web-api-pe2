@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using GDB.Api.Application.Services.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using GDB.Api.Common.Constants;
@@ -10,6 +11,7 @@ namespace GDB.Api.Application.Controllers
     [ApiVersion(ApiConstants.Version1)]
     [Route(ApiConstants.BaseAccounts)]
     [ApiController]
+    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -21,6 +23,7 @@ namespace GDB.Api.Application.Controllers
 
         // GET: api/v1/accounts
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllAccountsAsync()
         {
             var accounts = await _accountService.GetAllAccountsAsync();
@@ -62,6 +65,7 @@ namespace GDB.Api.Application.Controllers
 
         // POST: api/v1/accounts
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAccountAsync(CreateAccountRequestDto request)
         {
             var account = await _accountService.CreateAccountAsync(request);
@@ -71,6 +75,7 @@ namespace GDB.Api.Application.Controllers
 
         // POST: api/v1/accounts/close
         [HttpPost(ApiConstants.CloseAccount)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CloseAccountAsync(CloseAccountRequestDto request)
         {
             var account = await _accountService.CloseAccountAsync(request);
