@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using gdb.Logging;
 using Microsoft.Extensions.Logging;
 using GDB.Api.Application.Dtos;
 using GDB.Api.Domain.Enums;

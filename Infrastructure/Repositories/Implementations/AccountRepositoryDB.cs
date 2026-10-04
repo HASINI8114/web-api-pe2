@@ -3,7 +3,6 @@ using GDB.Api.Domain.Models;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using GDB.Api.Infrastructure.Repositories.Queries;
 using System.Data.Common;
-using gdb.Logging;
 using Microsoft.Extensions.Logging;
 using System.Data;
 //using System.Data.SqlClient;
@@ -14,11 +13,13 @@ namespace GDB.Api.Infrastructure.Repositories.Implementations
     {
         private readonly IDataBaseConnectionManager _connectionManager;
 
-        public AccountRepositoryDB(IDataBaseConnectionManager connectionManager)
+        private readonly ILogger<AccountRepositoryDB> _logger;
+
+        public AccountRepositoryDB(IDataBaseConnectionManager connectionManager, ILogger<AccountRepositoryDB> logger)
         {
             _connectionManager = connectionManager;
+            _logger = logger;
         }
-        private static readonly ILogger _logger = AppLogger.CreateLogger<AccountRepositoryDB>();
 
         public async Task<IAccount> GetAccountAsync(string accountNumber)
         {

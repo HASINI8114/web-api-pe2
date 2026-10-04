@@ -10,22 +10,24 @@ using System.Threading.Tasks;
 using GDB.Api.Infrastructure.Repositories.Implementations;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using GDB.Api.Domain.Models;
-using gdb.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace GDB.Api.Infrastructure.Repositories
 {
     class AccountRepositoryFactory: IAccountRepositoryFactory
     {
-        private static readonly ILogger _logger = AppLogger.CreateLogger<AccountRepositoryFactory>();
+        private readonly ILogger<AccountRepositoryFactory> _logger;
+        private readonly ILoggerFactory _loggerFactory;
 
         private readonly IDataBaseConnectionManager _connectionManager;
         private readonly IGDBInMemoryDataStore _gDBInMemoryDataStore;
 
-        public AccountRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore)
+        public AccountRepositoryFactory(IDataBaseConnectionManager connectionManager, IGDBInMemoryDataStore gDBInMemoryDataStore, ILoggerFactory loggerFactory)
         {
             _connectionManager = connectionManager;
             _gDBInMemoryDataStore = gDBInMemoryDataStore;
+            _loggerFactory = loggerFactory;
+            _logger = loggerFactory.CreateLogger<AccountRepositoryFactory>();
         }
 
         public IAccountRepository Create(string choice)
@@ -37,7 +39,7 @@ namespace GDB.Api.Infrastructure.Repositories
 
             if (choice.Equals("DB"))
 
-                repository = new AccountRepositoryDB(_connectionManager);
+                repository = new AccountRepositoryDB(_connectionManager, _loggerFactory.CreateLogger<AccountRepositoryDB>());
 
             else if (choice.Equals("InMemory"))
 

@@ -1,5 +1,4 @@
-﻿using gdb.Logging;
-using GDB.Api.Application.Dtos;
+﻿using GDB.Api.Application.Dtos;
 using GDB.Api.Application.Services.Contracts;
 using GDB.Api.Domain.Enums;
 using GDB.Api.Domain.Exceptions;
@@ -21,15 +20,16 @@ namespace GDB.Api.Application.Services.Implementations
         private readonly IAccountRepository _accountRepository;
         private readonly ITransactionRepository _transactionRepository;
 
-        private static readonly ILogger _logger =
-            AppLogger.CreateLogger<WithdrawTransactionCommand>();
+        private readonly ILogger<WithdrawTransactionCommand> _logger;
 
         public WithdrawTransactionCommand(
             IAccountRepository accountRepository,
-            ITransactionRepository transactionRepository)
+            ITransactionRepository transactionRepository,
+            ILogger<WithdrawTransactionCommand> logger)
         {
             _accountRepository = accountRepository;
             _transactionRepository = transactionRepository;
+            _logger = logger;
         }
 
         public async Task<WithdrawResponseDto> ExecuteAsync(
