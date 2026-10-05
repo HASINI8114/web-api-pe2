@@ -6,13 +6,38 @@ using GDB.Api.Common.Constants;
 using GDB.Api.Common.ExceptionHandling;
 using GDB.Api.Common.Extensions;
 using GDB.Api.Data;
+using Microsoft.OpenApi;
 using GDB.Api.Domain;
 using GDB.Api.Infrastructure.Repositories;
 using GDB.Api.Infrastructure.Repositories.Contracts;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+            )
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddSerilog((services, loggerConfiguration) => loggerConfiguration
     .ReadFrom.Configuration(builder.Configuration)
@@ -47,11 +72,30 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddOpenApi("v1");
 builder.Services.AddOpenApi("v2");
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token."
+    });
+
+    options.AddSecurityRequirement(document =>
+        new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+        });
+});
 
 builder.Services.AddSingleton<IGDBInMemoryDB, GDBInMemoryDB>();
 
 builder.Services.AddSingleton<IGDBInMemoryDataStore, GDBInMemoryDataStore>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Register AccountService
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -100,6 +144,7 @@ app.UseExceptionHandler();
 
 app.UseCors(CorsExtensions.DefaultPolicy);
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
